@@ -5,7 +5,9 @@
       "args": ["-y", "r3ngine-mcp"],
       "env": {
         "R3NGINE_URL": "https://<this-host>",
-        "R3NGINE_MCP_API_KEY": "<shown-once-secret>"
+        "R3NGINE_MCP_API_KEY": "<shown-once-secret>",
+        "R3NGINE_CA_CERT": "<full-path-to-ca.crt>",
+        "NODE_EXTRA_CA_CERTS": "<full-path-to-ca.crt>"
       }
     }
   }

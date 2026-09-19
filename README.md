@@ -110,6 +110,14 @@ node scripts/install-mcp.mjs --url https://your-r3ngine-host --key r3n_mcp_… -
 
 That clones this repository into `r3ngine-mcp/` (if needed) and runs `scripts/install.mjs`: npm install, build, `.env`, a live `/api/mcp/` session check, and a smoke start.
 
+HTTPS setup needs the TLS CA on this computer. Local checkouts use the full path to `secrets/certs/ca.crt`. Otherwise copy that file from the r3ngine host and pass the full path:
+
+```bash
+node scripts/install-mcp.mjs --url https://your-r3ngine-host --key r3n_mcp_… --yes --write-cursor --ca C:\full\path\to\ca.crt
+```
+
+The installer prints that path and writes it to `.env` and MCP client env so agents can find the cert.
+
 ### stdio (Cursor, Claude Desktop, VS Code)
 
 Generate a key in Settings → MCP Access, then paste:
@@ -122,7 +130,9 @@ Generate a key in Settings → MCP Access, then paste:
       "args": ["-y", "r3ngine-mcp"],
       "env": {
         "R3NGINE_URL": "https://your-r3ngine-host",
-        "R3NGINE_MCP_API_KEY": "r3n_mcp_…shown-once…"
+        "R3NGINE_MCP_API_KEY": "r3n_mcp_…shown-once…",
+        "R3NGINE_CA_CERT": "C:\\full\\path\\to\\ca.crt",
+        "NODE_EXTRA_CA_CERTS": "C:\\full\\path\\to\\ca.crt"
       }
     }
   }

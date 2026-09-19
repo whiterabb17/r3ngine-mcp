@@ -9,7 +9,7 @@
     "build": "tsc -p tsconfig.json",
     "start": "node dist/index.js",
     "setup": "node scripts/install.mjs",
-    "test": "node --import tsx --test src/allowlist.test.ts src/format.test.ts src/client.test.ts src/ratelimit.test.ts src/tools/names.test.ts scripts/install.test.mjs"
+    "test": "node --import tsx --test src/allowlist.test.ts src/format.test.ts src/client.test.ts src/ratelimit.test.ts src/tools/names.test.ts src/tls.test.ts src/identity.test.ts scripts/install.test.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.25.0",

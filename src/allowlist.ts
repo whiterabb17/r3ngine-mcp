@@ -29,6 +29,7 @@ export function assertAllowedPath(path: string): void {
   const blocked =
     pathOnly.includes('/audit') ||
     pathOnly.includes('/keys') ||
+    pathOnly.includes('/agents/') ||
     (pathOnly.includes('/sessions/') && pathOnly.endsWith('/revoke/'));
   const ok = ALLOWED_PATHS.some((prefix) => pathOnly === prefix || pathOnly.startsWith(prefix));
   if (!ok || blocked) {

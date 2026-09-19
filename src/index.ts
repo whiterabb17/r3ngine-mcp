@@ -6,6 +6,7 @@ import { RengineMcpClient } from './client.js';
 import { McpHttpError } from './errors.js';
 import { createServer } from './server.js';
 import { openSession, startHeartbeat } from './session.js';
+import { resolveAgentIdentity } from './identity.js';
 import { UnauthRateLimit, clientIp } from './ratelimit.js';
 
 const HTTP_DISABLED =
@@ -48,11 +49,12 @@ async function main() {
 
   if (!httpMode) {
     const client = new RengineMcpClient(url, apiKey as string);
+    const identity = resolveAgentIdentity();
     const sessionId = await openSession(client, {
       name: 'r3ngine-mcp',
       version: '1.0.0',
       transport: 'stdio',
-    });
+    }, identity);
     startHeartbeat(client, sessionId);
     const server = createServer(client);
     const transport = new StdioServerTransport();
@@ -74,7 +76,7 @@ async function main() {
       name: 'r3ngine-mcp',
       version: '1.0.0',
       transport: 'http',
-    });
+    }, resolveAgentIdentity(process.env, { provider: 'http-sidecar' }));
     startHeartbeat(client, sessionId);
     clients.set(secret, client);
     return client;

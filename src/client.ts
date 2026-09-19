@@ -1,5 +1,6 @@
 import { assertAllowedPath } from './allowlist.js';
 import { mapHttpError } from './errors.js';
+import { requestWithCa, resolveTlsContext } from './tls.js';
 
 export class RengineMcpClient {
   constructor(
@@ -23,11 +24,14 @@ export class RengineMcpClient {
     if (body !== undefined) {
       headers['Content-Type'] = 'application/json';
     }
-    const response = await fetch(`${this.url.replace(/\/$/, '')}${path}`, {
+    const tlsOpts = resolveTlsContext(this.url);
+    const response = await requestWithCa(`${this.url.replace(/\/$/, '')}${path}`, {
       method,
       headers,
       body: body === undefined ? undefined : JSON.stringify(body),
       signal: AbortSignal.timeout(timeoutMs),
+      ca: tlsOpts.ca,
+      tlsServerName: tlsOpts.tlsServerName,
     });
     const text = await response.text();
     if (!response.ok) {

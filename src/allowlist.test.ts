@@ -12,4 +12,5 @@ test('refuses audit, keys, and session revoke', () => {
   assert.throws(() => assertAllowedPath('/api/mcp/audit/'), /Refusing non-allowlisted/);
   assert.throws(() => assertAllowedPath('/api/mcp/keys/'), /Refusing non-allowlisted/);
   assert.throws(() => assertAllowedPath('/api/mcp/sessions/abc/revoke/'), /Refusing non-allowlisted/);
+  assert.throws(() => assertAllowedPath('/api/mcp/agents/abc/'), /Refusing non-allowlisted/);
 });
