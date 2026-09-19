@@ -1,0 +1,12 @@
+{
+  "servers": {
+    "r3ngine": {
+      "command": "npx",
+      "args": ["-y", "r3ngine-mcp"],
+      "env": {
+        "R3NGINE_URL": "https://<this-host>",
+        "R3NGINE_MCP_API_KEY": "<shown-once-secret>"
+      }
+    }
+  }
+}

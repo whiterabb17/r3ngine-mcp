@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<evaluation>
+  <!--
+    Fixture (eval instance):
+      project slug: eval
+      target id 1: example.com
+      scan id 1: two subdomains www.example.com and api.example.com
+      one critical vulnerability named CVE-2024-0001
+      engine named Default
+      no employees, no emails, no attack paths
+  -->
+  <qa_pair>
+    <question>In project eval, what is the name of the target with id 1?</question>
+    <answer>example.com</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>What is the scan_status integer of scan id 1 in project eval?</question>
+    <answer>2</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>How many subdomains does scan id 1 have?</question>
+    <answer>2</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>What is the name of the critical vulnerability on scan 1?</question>
+    <answer>CVE-2024-0001</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>Does the engine list contain an engine named Default?</question>
+    <answer>yes</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>Is the database status up according to system health?</question>
+    <answer>true</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>What is the dashboard subdomain_count for project eval?</question>
+    <answer>2</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>How many employees does scan id 1 have?</question>
+    <answer>0</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>How many emails does scan id 1 have?</question>
+    <answer>0</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>How many attack paths does scan id 1 have?</question>
+    <answer>0</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>What is the second subdomain name on scan 1?</question>
+    <answer>api.example.com</answer>
+  </qa_pair>
+</evaluation>
