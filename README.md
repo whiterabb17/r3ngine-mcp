@@ -100,6 +100,16 @@ nginx:  /        → django
 *   Node.js 20+ (for stdio / `npx`)
 *   An MCP API key from **Settings → MCP Access**
 
+### From r3ngine
+
+In the r3ngine checkout:
+
+```bash
+node scripts/install-mcp.mjs --url https://your-r3ngine-host --key r3n_mcp_… --yes --write-cursor
+```
+
+That clones this repository into `r3ngine-mcp/` (if needed) and runs `scripts/install.mjs`: npm install, build, `.env`, a live `/api/mcp/` session check, and a smoke start.
+
 ### stdio (Cursor, Claude Desktop, VS Code)
 
 Generate a key in Settings → MCP Access, then paste:
@@ -139,10 +149,10 @@ The sidecar is wired from r3ngine Compose (`r3ngine-mcp` service, nginx `locatio
 ```bash
 git clone https://github.com/whiterabb17/r3ngine-mcp.git
 cd r3ngine-mcp
-npm install
-npm test
-npm run build
+npm run setup -- --url https://your-r3ngine-host --key r3n_mcp_… --yes
 ```
+
+`npm run setup` runs `scripts/install.mjs` (install, build, `.env`, session probe, smoke start). Copy `.env.example` if you prefer to fill values first.
 
 Required env: `R3NGINE_URL`, `R3NGINE_MCP_API_KEY`. HTTP mode additionally uses `MCP_TRANSPORT=http`, `MCP_BIND`, `MCP_PORT`. Optional: `MCP_UNAUTH_MAX` and `MCP_UNAUTH_WINDOW_MS` (unauthorized HTTP rate limit; default 10 failures per IP per minute).
 
