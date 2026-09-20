@@ -3,6 +3,7 @@ import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 export type AgentFacts = {
   provider: string;
@@ -128,9 +129,55 @@ export function findLogoPng(fromDir: string): string | undefined {
   return undefined;
 }
 
-export function mcpServerIcons(fromDir: string): { src: string; mimeType: string; sizes: string[] }[] {
-  const file = findLogoPng(fromDir);
-  if (!file) return [];
-  const encoded = fs.readFileSync(file).toString('base64');
-  return [{ src: `data:image/png;base64,${encoded}`, mimeType: 'image/png', sizes: ['any'] }];
+const MAX_ICON_DATA_BYTES = 100_000;
+
+type McpIcon = { src: string; mimeType: string; sizes: string[] };
+
+const ICON_SPECS: { filename: string; sizes: string[] }[] = [
+  { filename: 'icon-48.png', sizes: ['48x48'] },
+  { filename: 'icon-192.png', sizes: ['192x192'] },
+];
+
+export function findNamedPng(fromDir: string, filename: string): string | undefined {
+  const start = path.resolve(fromDir);
+  const candidates = [
+    path.join(start, 'assets', filename),
+    path.join(start, '..', 'r3ngine-mcp', 'assets', filename),
+  ];
+  for (const candidate of candidates) {
+    if (fs.existsSync(candidate)) return candidate;
+  }
+  return undefined;
+}
+
+export function mcpServerIcons(fromDir: string): McpIcon[] {
+  const icons: McpIcon[] = [];
+  const seen = new Set<string>();
+  const add = (src: string, sizes: string[]) => {
+    if (seen.has(src)) return;
+    seen.add(src);
+    icons.push({ src, mimeType: 'image/png', sizes });
+  };
+
+  for (const spec of ICON_SPECS) {
+    const file = findNamedPng(fromDir, spec.filename);
+    if (!file) continue;
+    const buf = fs.readFileSync(file);
+    if (buf.length <= MAX_ICON_DATA_BYTES) {
+      add(`data:image/png;base64,${buf.toString('base64')}`, spec.sizes);
+    }
+    add(pathToFileURL(file).href, spec.sizes);
+  }
+
+  if (!icons.length) {
+    const file = findLogoPng(fromDir);
+    if (file) {
+      const buf = fs.readFileSync(file);
+      if (buf.length <= MAX_ICON_DATA_BYTES) {
+        add(`data:image/png;base64,${buf.toString('base64')}`, ['512x512']);
+      }
+      add(pathToFileURL(file).href, ['512x512']);
+    }
+  }
+  return icons;
 }

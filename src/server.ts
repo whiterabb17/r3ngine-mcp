@@ -13,7 +13,7 @@ export function createServer(client: RengineMcpClient): McpServer {
     version: '1.0.0',
     websiteUrl: 'https://github.com/whiterabb17/r3ngine',
     icons: mcpServerIcons(ROOT),
-  } as ConstructorParameters<typeof McpServer>[0]);
+  });
   registerTools(server, client);
   return server;
 }

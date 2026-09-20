@@ -39,7 +39,16 @@ test('mcp server icon uses frontend/public/img/logo.png or assets/logo.png', () 
   const fromMcp = findLogoPng(mcpRoot);
   assert.ok(fromMcp);
   assert.match(fromMcp.replace(/\\/g, '/'), /logo\.png$/);
+});
+
+test('mcp server icons use small PNGs, not the full 1MB logo data URI', () => {
   const icons = mcpServerIcons(mcpRoot);
-  assert.equal(icons[0]?.mimeType, 'image/png');
-  assert.match(icons[0]?.src || '', /^data:image\/png;base64,/);
+  assert.ok(icons.length >= 1);
+  const data = icons.find((icon) => icon.src.startsWith('data:image/png;base64,'));
+  assert.ok(data);
+  const payload = Buffer.from(data.src.split(',')[1] || '', 'base64');
+  assert.ok(payload.length > 0);
+  assert.ok(payload.length <= 100_000);
+  assert.ok(icons.some((icon) => icon.sizes.includes('48x48') || icon.sizes.includes('192x192')));
+  assert.equal(data.mimeType, 'image/png');
 });
