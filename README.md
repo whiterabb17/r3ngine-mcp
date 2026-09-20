@@ -23,6 +23,7 @@
 
 * [About r3ngine-mcp](#about-r3ngine-mcp)
 * [Workflow](#workflow)
+* [Assessment agent](#assessment-agent)
 * [Features](#features)
 * [Quick Installation](#quick-installation)
 * [What Agents Cannot Do](#what-agents-cannot-do)
@@ -66,6 +67,16 @@ nginx:  /        → django
 3. Paste stdio env or the HTTP URL + Bearer header into the agent.
 4. The MCP process opens a session, then calls only allowlisted `/api/mcp/` paths.
 5. Connected agents and the full request/response chain appear in Settings. Revoke a session to kick an agent off without rotating the key.
+
+![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
+
+## Assessment agent
+
+This repo ships a **consultant** specialist (not a platform-dev agent): `AGENTS.md`, `docs/assessment-playbook.md`, `.cursor/agents/r3ngine-assessor.md`, `.claude/agents/r3ngine-assessor.md`.
+
+Use it with a connected r3ngine MCP server to analyse scan status and results, propose next allowed work (dispatch only after you approve), and write a client assessment pack when asked.
+
+In Cursor: invoke **r3ngine-assessor**.
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
