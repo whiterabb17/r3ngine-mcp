@@ -3,6 +3,7 @@ import type { RengineMcpClient } from '../client.js';
 import { registerApmeTools } from './apme.js';
 import { registerDispatchTools } from './dispatch.js';
 import { registerFindingTools } from './findings.js';
+import { registerNoteTools } from './notes.js';
 import { registerOsintTools } from './osint.js';
 import { registerProjectTools } from './projects.js';
 import { registerScanTools } from './scans.js';
@@ -22,11 +23,15 @@ export const TOOL_NAMES = [
   'r3ngine_list_exposures',
   'r3ngine_list_emails',
   'r3ngine_list_employees',
+  'r3ngine_list_notes',
+  'r3ngine_get_note',
   'r3ngine_search',
   'r3ngine_get_dashboard',
   'r3ngine_get_attack_paths',
   'r3ngine_list_engines',
   'r3ngine_get_system_health',
+  'r3ngine_create_note',
+  'r3ngine_update_note',
   'r3ngine_start_scan',
   'r3ngine_pause_scan',
   'r3ngine_resume_scan',
@@ -52,6 +57,7 @@ export function registerTools(server: McpServer, client: RengineMcpClient) {
   registerScanTools(server, client);
   registerFindingTools(server, client);
   registerOsintTools(server, client);
+  registerNoteTools(server, client);
   registerApmeTools(server, client);
   registerDispatchTools(server, client);
 }

@@ -17,6 +17,7 @@ export const ALLOWED_PATHS: readonly string[] = [
   '/api/mcp/attack-paths/',
   '/api/mcp/engines/',
   '/api/mcp/health/',
+  '/api/mcp/notes/',
   '/api/mcp/tasks/',
   '/api/mcp/email-discovery/',
   '/api/mcp/employee-intel/',

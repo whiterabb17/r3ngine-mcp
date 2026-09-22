@@ -89,3 +89,38 @@ export function registerPost(
       }),
   );
 }
+
+export function registerPatch(
+  server: McpServer,
+  client: RengineMcpClient,
+  name: string,
+  title: string,
+  description: string,
+  inputSchema: Record<string, z.ZodTypeAny>,
+  path: (args: Record<string, unknown>) => string,
+  body: (args: Record<string, unknown>) => unknown,
+) {
+  server.registerTool(
+    name,
+    {
+      title,
+      description,
+      inputSchema,
+      annotations: {
+        readOnlyHint: false,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: true,
+      },
+    },
+    async (args) =>
+      safeCall(async () => {
+        const data = await client.request(
+          'PATCH',
+          path(args as Record<string, unknown>),
+          body(args as Record<string, unknown>),
+        );
+        return formatResult(data, (args as { response_format?: 'markdown' | 'json' }).response_format ?? 'markdown');
+      }),
+  );
+}

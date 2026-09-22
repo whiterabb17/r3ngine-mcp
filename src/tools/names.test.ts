@@ -16,11 +16,15 @@ const expected = [
   'r3ngine_list_exposures',
   'r3ngine_list_emails',
   'r3ngine_list_employees',
+  'r3ngine_list_notes',
+  'r3ngine_get_note',
   'r3ngine_search',
   'r3ngine_get_dashboard',
   'r3ngine_get_attack_paths',
   'r3ngine_list_engines',
   'r3ngine_get_system_health',
+  'r3ngine_create_note',
+  'r3ngine_update_note',
   'r3ngine_start_scan',
   'r3ngine_pause_scan',
   'r3ngine_resume_scan',
@@ -36,10 +40,10 @@ const expected = [
   'r3ngine_start_workflow',
 ];
 
-test('registers every spec tool name and none that mutate files or records', () => {
+test('registers every spec tool name and none that delete or touch files', () => {
   const names = listToolNames();
   assert.deepEqual([...names].sort(), [...expected].sort());
   for (const name of names) {
-    assert.equal(/delete|update|import|file/i.test(name), false, name);
+    assert.equal(/delete|import|file/i.test(name), false, name);
   }
 });

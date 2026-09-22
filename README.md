@@ -95,7 +95,8 @@ In Cursor: invoke **r3ngine-assessor**.
 
 ### 📚 Tool catalog
 *   Read tools: `r3ngine_list_*`, `r3ngine_get_*`, `r3ngine_search`.
-*   Dispatch tools: scan lifecycle, intel jobs, APME, named workflows.
+*   Notes: `r3ngine_list_notes`, `r3ngine_get_note`, `r3ngine_create_note`, `r3ngine_update_note` (no delete).
+*   Dispatch tools: scan lifecycle, **subscans**, intel jobs, APME, named workflows.
 *   Payloads omit API Vault secrets, `results_dir` paths, `curl_command`, and email passwords.
 
 ### 🛡️ Isolation
@@ -183,7 +184,7 @@ Missing URL or key exits `1` on **stderr** (never stdout — that would break st
 
 ## What Agents Cannot Do
 
-Delete or update targets, subdomains, vulnerabilities, exposures, notes, users, engines, wordlists, plugins, or files. Config import/export. Arbitrary proxy to the rest of Django. Raw SQL. Shell.
+Delete or update targets, subdomains, vulnerabilities, exposures, users, engines, wordlists, plugins, or files. **Delete notes** is not available (create/update notes are allowed for pentester keys). Config import/export. Arbitrary proxy to the rest of Django. Raw SQL. Shell.
 
 Session list, audit read, session revoke, and key management are **not** MCP tools. They stay in the r3ngine UI (JWT/session).
 

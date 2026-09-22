@@ -6,6 +6,9 @@ test('allows targets and session open', () => {
   assert.doesNotThrow(() => assertAllowedPath('/api/mcp/targets/'));
   assert.doesNotThrow(() => assertAllowedPath('/api/mcp/sessions/'));
   assert.doesNotThrow(() => assertAllowedPath('/api/mcp/sessions/abc/heartbeat/'));
+  assert.doesNotThrow(() => assertAllowedPath('/api/mcp/notes/'));
+  assert.doesNotThrow(() => assertAllowedPath('/api/mcp/notes/12/'));
+  assert.doesNotThrow(() => assertAllowedPath('/api/mcp/subscans/start/'));
 });
 
 test('refuses audit, keys, and session revoke', () => {

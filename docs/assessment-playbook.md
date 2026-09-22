@@ -14,6 +14,7 @@ Tool names must match the sidecar catalog (`src/tools/index.ts`).
 | Live / pending / recent | `r3ngine_get_scan_status` |
 | Scan record | `r3ngine_get_scan`, `r3ngine_list_scans` |
 | Child jobs | `r3ngine_list_subscans` |
+| Notes | `r3ngine_list_notes`, `r3ngine_get_note` |
 | Instance | `r3ngine_get_system_health` |
 
 Confirm `project_slug`, `scan_id`, `target` / `domain_id` with the operator if missing.
@@ -41,6 +42,8 @@ Order by severity, then asset. Group noisy TLS/cipher families by host.
 
 Each finding: title, severity, asset, scan id, evidence from MCP, impact, remediation.
 
+Persist durable analyst notes with `r3ngine_create_note` / `r3ngine_update_note` (pentester keys). Never delete notes via MCP.
+
 ## 4. Intel
 
 Use when the engagement includes OSINT:
@@ -64,10 +67,10 @@ If APME is empty, say so and optionally propose `r3ngine_trigger_apme` / `r3ngin
 1. `r3ngine_list_engines` for names/ids.
 2. Propose **one** action: tool, ids, why, expected evidence.
 3. Wait for explicit yes.
-4. Then one of: `r3ngine_start_scan`, `r3ngine_start_subscan`, `r3ngine_pause_scan`, `r3ngine_resume_scan`, `r3ngine_stop_scan`, `r3ngine_retry_task`, `r3ngine_start_email_discovery`, `r3ngine_stop_email_discovery`, `r3ngine_start_employee_intel`, `r3ngine_stop_employee_intel`, `r3ngine_trigger_apme`, `r3ngine_recalculate_apme`, `r3ngine_start_workflow`.
+4. Then one of: `r3ngine_start_scan`, `r3ngine_start_subscan` (subdomain_ids + tasks), `r3ngine_pause_scan`, `r3ngine_resume_scan`, `r3ngine_stop_scan`, `r3ngine_retry_task`, `r3ngine_start_email_discovery`, `r3ngine_stop_email_discovery`, `r3ngine_start_employee_intel`, `r3ngine_stop_employee_intel`, `r3ngine_trigger_apme`, `r3ngine_recalculate_apme`, `r3ngine_start_workflow`.
 5. Re-orient. Do not chain dispatch without a new approval.
 
-Auditor keys: skip this phase.
+Auditor keys: skip this phase. Notes create/update also require a pentester (or sys-admin) key.
 
 ## 7. Client pack
 
