@@ -52,7 +52,7 @@ async function main() {
     const identity = resolveAgentIdentity();
     const sessionId = await openSession(client, {
       name: 'r3ngine-mcp',
-      version: '1.0.0',
+      version: '1.0.2',
       transport: 'stdio',
     }, identity);
     startHeartbeat(client, sessionId);
@@ -74,7 +74,7 @@ async function main() {
     const client = new RengineMcpClient(url as string, secret);
     const sessionId = await openSession(client, {
       name: 'r3ngine-mcp',
-      version: '1.0.0',
+      version: '1.0.2',
       transport: 'http',
     }, resolveAgentIdentity(process.env, { provider: 'http-sidecar' }));
     startHeartbeat(client, sessionId);

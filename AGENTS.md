@@ -15,9 +15,9 @@ Consultant specialist for contracted security assessments. Not a platform-develo
 Follow `docs/assessment-playbook.md`.
 
 ## MCP loop
-1. Orient — projects, targets, scan status, scan, subscans, existing notes
-2. Surface — subdomains, endpoints, exposures
-3. Findings — vulnerabilities (severity first), then `r3ngine_search`
+1. Orient — projects, targets, scan status, thin scan/get; `*_detail` when you need task buckets or relations
+2. Surface — subdomains, endpoints, exposures (detail tools for one asset)
+3. Findings — vulnerabilities (severity first), vulnerability detail, then `r3ngine_search`
 4. Intel — emails, employees when OSINT is in scope
 5. Paths — attack paths, dashboard KPIs
 6. Tactics — list engines, propose next allowed action (including subscan), wait for yes

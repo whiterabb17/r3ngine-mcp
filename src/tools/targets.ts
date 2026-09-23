@@ -28,4 +28,13 @@ export function registerTargetTools(server: McpServer, client: RengineMcpClient)
     { target_id: z.number().int(), response_format: formatSchema },
     (args) => `/api/mcp/targets/${args.target_id}/`,
   );
+  registerGet(
+    server,
+    client,
+    'r3ngine_get_target_detail',
+    'Get target detail',
+    'Target with scope snippets, recent scans, and recent vulnerabilities. Use after thin get/list when you need relations. Read-only.',
+    { target_id: z.number().int(), response_format: formatSchema },
+    (args) => `/api/mcp/targets/${args.target_id}/detail/`,
+  );
 }

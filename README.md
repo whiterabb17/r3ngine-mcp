@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-<a href="https://github.com/whiterabb17/r3ngine-mcp/releases" target="_blank"><img src="https://img.shields.io/badge/version-v1.0.0-informational?&logo=none" alt="r3ngine MCP Version" /></a>&nbsp;<a href="https://github.com/whiterabb17/r3ngine/releases" target="_blank"><img src="https://img.shields.io/badge/compatible_with-r3ngine_v3.7.6+-warning?&logo=none" alt="Compatible r3ngine version" /></a><br/><a href="https://www.gnu.org/licenses/gpl-3.0" target="_blank"><img src="https://img.shields.io/badge/License-GPLv3-red.svg?&logo=none" alt="License" /></a>&nbsp;<a href="https://modelcontextprotocol.io" target="_blank"><img src="https://img.shields.io/badge/Protocol-MCP-blue.svg?&logo=none" alt="MCP" /></a>&nbsp;<a href="https://www.typescriptlang.org/" target="_blank"><img src="https://img.shields.io/badge/Language-TypeScript-3178C6.svg?&logo=none" alt="TypeScript" /></a>
+<a href="https://github.com/whiterabb17/r3ngine-mcp/releases" target="_blank"><img src="https://img.shields.io/badge/version-v1.0.2-informational?&logo=none" alt="r3ngine MCP Version" /></a>&nbsp;<a href="https://github.com/whiterabb17/r3ngine/releases" target="_blank"><img src="https://img.shields.io/badge/compatible_with-r3ngine_v3.7.6+-warning?&logo=none" alt="Compatible r3ngine version" /></a><br/><a href="https://www.gnu.org/licenses/gpl-3.0" target="_blank"><img src="https://img.shields.io/badge/License-GPLv3-red.svg?&logo=none" alt="License" /></a>&nbsp;<a href="https://modelcontextprotocol.io" target="_blank"><img src="https://img.shields.io/badge/Protocol-MCP-blue.svg?&logo=none" alt="MCP" /></a>&nbsp;<a href="https://www.typescriptlang.org/" target="_blank"><img src="https://img.shields.io/badge/Language-TypeScript-3178C6.svg?&logo=none" alt="TypeScript" /></a>
 </p>
 
 <h4>r3ngine MCP: Agent Access Without Giving Away the Keys to the Kingdom</h4>
@@ -37,7 +37,7 @@
 
 r3ngine-mcp is a thin, allowlisted MCP sidecar. Identity, hashed keys, sessions, the request/response audit chain, and Settings → MCP Access live in r3ngine. This package never opens Postgres, Redis, Neo4j, or scan-result volumes.
 
-🦾&nbsp;&nbsp; **Read-only recon** — projects, targets, scans, subdomains, endpoints, vulnerabilities, exposures, emails, employees, engines, dashboard KPIs, attack paths, and health.
+🦾&nbsp;&nbsp; **Read-only recon** — projects, targets, scans, subdomains, endpoints, vulnerabilities, exposures, emails, employees, engines, dashboard KPIs, attack paths, and health. Thin `list_*` / `get_*` stay lean; `*_detail` tools add rollups, relations, and scan task status buckets.
 
 🗃️&nbsp;&nbsp; **Safe dispatch** — start/pause/resume/stop scans, subscans, email discovery, employee intel, APME trigger/recalculate, and named workflows. Auditor keys stay read-only.
 
@@ -94,7 +94,8 @@ In Cursor: invoke **r3ngine-assessor**.
 *   **Unauthorized HTTP is rate-limited in the sidecar** (10 failures / IP / minute) so missing or invalid keys never flood r3ngine. Repeat offenders get `429 Retry-After`. Invalid keys are remembered for the window and are not re-probed.
 
 ### 📚 Tool catalog
-*   Read tools: `r3ngine_list_*`, `r3ngine_get_*`, `r3ngine_search`.
+*   Read tools: `r3ngine_list_*`, thin `r3ngine_get_*`, `r3ngine_search`.
+*   Detail tools: `r3ngine_get_*_detail` for scan (status-bucketed tasks + rollups), target, vulnerability, subdomain, endpoint, exposure, and subscan. Use after thin list/get when drilling in.
 *   Notes: `r3ngine_list_notes`, `r3ngine_get_note`, `r3ngine_create_note`, `r3ngine_update_note` (no delete).
 *   Dispatch tools: scan lifecycle, **subscans**, intel jobs, APME, named workflows.
 *   Payloads omit API Vault secrets, `results_dir` paths, `curl_command`, and email passwords.

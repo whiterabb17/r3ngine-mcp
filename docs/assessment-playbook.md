@@ -10,10 +10,10 @@ Tool names must match the sidecar catalog (`src/tools/index.ts`).
 |------|------|
 | Projects | `r3ngine_list_projects` |
 | Targets | `r3ngine_list_targets` (`project_slug`) |
-| One target | `r3ngine_get_target` |
+| One target | `r3ngine_get_target`; drill-down: `r3ngine_get_target_detail` |
 | Live / pending / recent | `r3ngine_get_scan_status` |
-| Scan record | `r3ngine_get_scan`, `r3ngine_list_scans` |
-| Child jobs | `r3ngine_list_subscans` |
+| Scan record | `r3ngine_get_scan`, `r3ngine_list_scans`; drill-down: `r3ngine_get_scan_detail` (task buckets + finding rollups) |
+| Child jobs | `r3ngine_list_subscans`; drill-down: `r3ngine_get_subscan_detail` |
 | Notes | `r3ngine_list_notes`, `r3ngine_get_note` |
 | Instance | `r3ngine_get_system_health` |
 
@@ -25,9 +25,9 @@ Confirm `project_slug`, `scan_id`, `target` / `domain_id` with the operator if m
 
 | Need | Tool |
 |------|------|
-| Hosts | `r3ngine_list_subdomains` |
-| URLs | `r3ngine_list_endpoints` |
-| Exposed services | `r3ngine_list_exposures` |
+| Hosts | `r3ngine_list_subdomains`; drill-down: `r3ngine_get_subdomain_detail` |
+| URLs | `r3ngine_list_endpoints`; drill-down: `r3ngine_get_endpoint_detail` |
+| Exposed services | `r3ngine_list_exposures`; drill-down: `r3ngine_get_exposure_detail` |
 
 Summarize counts and notable hosts. Do not paste unbounded JSON.
 
@@ -35,7 +35,7 @@ Summarize counts and notable hosts. Do not paste unbounded JSON.
 
 | Need | Tool |
 |------|------|
-| Vulns | `r3ngine_list_vulnerabilities` |
+| Vulns | `r3ngine_list_vulnerabilities`; drill-down: `r3ngine_get_vulnerability_detail` |
 | Lookup | `r3ngine_search` |
 
 Order by severity, then asset. Group noisy TLS/cipher families by host.

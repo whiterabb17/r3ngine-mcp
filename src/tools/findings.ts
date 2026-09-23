@@ -22,6 +22,15 @@ export function registerFindingTools(server: McpServer, client: RengineMcpClient
   registerGet(
     server,
     client,
+    'r3ngine_get_subdomain_detail',
+    'Get subdomain detail',
+    'Subdomain with tech/IPs/WAF and recent vulns/endpoints. Use after thin list when you need relations. Read-only.',
+    { subdomain_id: z.number().int(), response_format: formatSchema },
+    (args) => `/api/mcp/subdomains/${args.subdomain_id}/detail/`,
+  );
+  registerGet(
+    server,
+    client,
     'r3ngine_list_endpoints',
     'List endpoints',
     'List endpoints for a scan. Read-only.',
@@ -33,6 +42,15 @@ export function registerFindingTools(server: McpServer, client: RengineMcpClient
       response_format: formatSchema,
     },
     (args) => `/api/mcp/endpoints/${queryString(args)}`,
+  );
+  registerGet(
+    server,
+    client,
+    'r3ngine_get_endpoint_detail',
+    'Get endpoint detail',
+    'Endpoint with parameters and recent vulnerabilities. Use after thin list when you need relations. Read-only.',
+    { endpoint_id: z.number().int(), response_format: formatSchema },
+    (args) => `/api/mcp/endpoints/${args.endpoint_id}/detail/`,
   );
   registerGet(
     server,
@@ -54,6 +72,15 @@ export function registerFindingTools(server: McpServer, client: RengineMcpClient
   registerGet(
     server,
     client,
+    'r3ngine_get_vulnerability_detail',
+    'Get vulnerability detail',
+    'Vulnerability with description/impact/remediation, CVE/CWE/tags, and related ids. Omits raw request/response. Use after thin list when you need relations. Read-only.',
+    { vulnerability_id: z.number().int(), response_format: formatSchema },
+    (args) => `/api/mcp/vulnerabilities/${args.vulnerability_id}/detail/`,
+  );
+  registerGet(
+    server,
+    client,
     'r3ngine_list_exposures',
     'List exposures',
     'List exposures. Read-only.',
@@ -66,6 +93,15 @@ export function registerFindingTools(server: McpServer, client: RengineMcpClient
       response_format: formatSchema,
     },
     (args) => `/api/mcp/exposures/${queryString(args)}`,
+  );
+  registerGet(
+    server,
+    client,
+    'r3ngine_get_exposure_detail',
+    'Get exposure detail',
+    'Exposure with linked host/endpoint and related vulnerabilities. Use after thin list when you need relations. Read-only.',
+    { exposure_id: z.number().int(), response_format: formatSchema },
+    (args) => `/api/mcp/exposures/${args.exposure_id}/detail/`,
   );
   registerGet(
     server,

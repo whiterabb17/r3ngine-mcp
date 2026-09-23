@@ -32,6 +32,15 @@ export function registerScanTools(server: McpServer, client: RengineMcpClient) {
   registerGet(
     server,
     client,
+    'r3ngine_get_scan_detail',
+    'Get scan detail',
+    'Scan with finding rollups and tasks grouped by status (initiated/running/success/failed/aborted). Use after thin get/list when you need relations or task buckets. Read-only.',
+    { scan_id: z.number().int(), response_format: formatSchema },
+    (args) => `/api/mcp/scans/${args.scan_id}/detail/`,
+  );
+  registerGet(
+    server,
+    client,
     'r3ngine_get_scan_status',
     'Get scan status',
     'Pending, running, and recently completed scans. Read-only.',
@@ -51,5 +60,14 @@ export function registerScanTools(server: McpServer, client: RengineMcpClient) {
       response_format: formatSchema,
     },
     (args) => `/api/mcp/subscans/${queryString(args)}`,
+  );
+  registerGet(
+    server,
+    client,
+    'r3ngine_get_subscan_detail',
+    'Get subscan detail',
+    'Subscan with parent scan and status-bucketed activities. Use after thin list when you need relations or task buckets. Read-only.',
+    { subscan_id: z.number().int(), response_format: formatSchema },
+    (args) => `/api/mcp/subscans/${args.subscan_id}/detail/`,
   );
 }

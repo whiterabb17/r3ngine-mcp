@@ -10,7 +10,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export function createServer(client: RengineMcpClient): McpServer {
   const server = new McpServer({
     name: 'r3ngine',
-    version: '1.0.0',
+    version: '1.0.2',
     websiteUrl: 'https://github.com/whiterabb17/r3ngine',
     icons: mcpServerIcons(ROOT),
   });
