@@ -54,8 +54,9 @@ export function registerOsintTools(server: McpServer, client: RengineMcpClient) 
     client,
     'r3ngine_verify_osint_staging',
     'Verify OSINT staging',
-    'Post agent triage: set agent_verified true (keep) or false (noise/FP) on staging ids. Does not promote or delete. Operator uses UI Add verified / Clear false positive after.',
+    'Post agent triage: set agent_verified true (keep) or false (noise/FP) on staging ids for a scan. Does not promote or delete. Operator uses UI Add verified / Clear false positive after.',
     {
+      scan_id: z.number().int(),
       updates: z
         .array(
           z.object({
@@ -68,6 +69,6 @@ export function registerOsintTools(server: McpServer, client: RengineMcpClient) 
       response_format: formatSchema,
     },
     '/api/mcp/osint-staging/verify/',
-    (args) => ({ updates: args.updates }),
+    (args) => ({ scan_id: args.scan_id, updates: args.updates }),
   );
 }
