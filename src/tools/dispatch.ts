@@ -146,4 +146,28 @@ export function registerDispatchTools(server: McpServer, client: RengineMcpClien
     '/api/mcp/workflows/start/',
     (args) => args,
   );
+  registerPost(
+    server,
+    client,
+    'r3ngine_run_tool',
+    'Run singular tool',
+    'Run one pipeline tool or workflow on a single asset. Prefer propose_followups for multi-step plans. Requires operator approval context.',
+    {
+      tool: z.string(),
+      asset_type: z.enum(['subdomain', 'endpoint', 'url', 'host']),
+      asset_id: z.number().int().optional(),
+      url: z.string().optional(),
+      scan_history_id: z.number().int().optional(),
+      scan_id: z.number().int().optional(),
+      response_format: formatSchema,
+    },
+    '/api/mcp/tools/run/',
+    (args) => ({
+      tool: args.tool,
+      asset_type: args.asset_type,
+      asset_id: args.asset_id,
+      url: args.url,
+      scan_history_id: args.scan_history_id ?? args.scan_id,
+    }),
+  );
 }

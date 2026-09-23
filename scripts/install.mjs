@@ -617,7 +617,7 @@ export async function probeInstance({ url, key, transport, fetchImpl, ca, tlsSer
       body: JSON.stringify({
         transport,
         client_name: 'r3ngine-mcp-install',
-        client_version: '1.0.2',
+        client_version: '1.0.3',
         ...(() => {
           const id = setupAgentIdentity();
           return {

@@ -69,6 +69,20 @@ export function registerPost(
   body: (args: Record<string, unknown>) => unknown,
   idempotent = false,
 ) {
+  registerPostPath(server, client, name, title, description, inputSchema, () => path, body, idempotent);
+}
+
+export function registerPostPath(
+  server: McpServer,
+  client: RengineMcpClient,
+  name: string,
+  title: string,
+  description: string,
+  inputSchema: Record<string, z.ZodTypeAny>,
+  path: (args: Record<string, unknown>) => string,
+  body: (args: Record<string, unknown>) => unknown,
+  idempotent = false,
+) {
   server.registerTool(
     name,
     {
@@ -84,7 +98,11 @@ export function registerPost(
     },
     async (args) =>
       safeCall(async () => {
-        const data = await client.request('POST', path, body(args as Record<string, unknown>));
+        const data = await client.request(
+          'POST',
+          path(args as Record<string, unknown>),
+          body(args as Record<string, unknown>),
+        );
         return formatResult(data, (args as { response_format?: 'markdown' | 'json' }).response_format ?? 'markdown');
       }),
   );

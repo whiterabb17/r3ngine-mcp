@@ -3,6 +3,7 @@ import type { RengineMcpClient } from '../client.js';
 import { registerApmeTools } from './apme.js';
 import { registerDispatchTools } from './dispatch.js';
 import { registerFindingTools } from './findings.js';
+import { registerFollowupTools } from './followups.js';
 import { registerNoteTools } from './notes.js';
 import { registerOsintTools } from './osint.js';
 import { registerProjectTools } from './projects.js';
@@ -30,12 +31,16 @@ export const TOOL_NAMES = [
   'r3ngine_get_exposure_detail',
   'r3ngine_list_emails',
   'r3ngine_list_employees',
+  'r3ngine_list_osint_staging',
+  'r3ngine_verify_osint_staging',
   'r3ngine_list_notes',
   'r3ngine_get_note',
   'r3ngine_search',
   'r3ngine_get_dashboard',
   'r3ngine_get_attack_paths',
   'r3ngine_list_engines',
+  'r3ngine_get_engine_detail',
+  'r3ngine_list_capabilities',
   'r3ngine_get_system_health',
   'r3ngine_create_note',
   'r3ngine_update_note',
@@ -45,6 +50,15 @@ export const TOOL_NAMES = [
   'r3ngine_stop_scan',
   'r3ngine_retry_task',
   'r3ngine_start_subscan',
+  'r3ngine_run_tool',
+  'r3ngine_list_followups',
+  'r3ngine_get_followup_plan',
+  'r3ngine_get_followup_metrics',
+  'r3ngine_propose_followups',
+  'r3ngine_update_followups',
+  'r3ngine_approve_followups',
+  'r3ngine_abort_followups',
+  'r3ngine_retry_followups',
   'r3ngine_start_email_discovery',
   'r3ngine_stop_email_discovery',
   'r3ngine_start_employee_intel',
@@ -67,4 +81,5 @@ export function registerTools(server: McpServer, client: RengineMcpClient) {
   registerNoteTools(server, client);
   registerApmeTools(server, client);
   registerDispatchTools(server, client);
+  registerFollowupTools(server, client);
 }
