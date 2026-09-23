@@ -184,8 +184,8 @@ export function registerDispatchTools(server: McpServer, client: RengineMcpClien
       response_format: formatSchema,
     },
     (args) =>
-      `/api/mcp/tools/${encodeURIComponent(args.tool)}/args/${queryString({
-        refresh: args.refresh ? 1 : undefined,
+      `/api/mcp/tools/${encodeURIComponent(String(args.tool))}/args/${queryString({
+        refresh: args.refresh === true ? 1 : undefined,
       })}`,
   );
 }
