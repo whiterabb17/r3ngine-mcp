@@ -87,7 +87,7 @@ If APME is empty, say so and optionally propose `r3ngine_trigger_apme` / `r3ngin
 3. Call `r3ngine_propose_followups` with `project_slug`, optional `scan_id` / `assessment_id`, rationale, and steps.
 4. Tell the operator they may **edit** (`r3ngine_update_followups`) then **approve** (`r3ngine_approve_followups`). Kill switch: `r3ngine_abort_followups`. Retry failed/aborted: `r3ngine_retry_followups` — **only after explicit yes**.
 5. Poll `r3ngine_get_followup_plan` for status. Do not chain new dispatch without a new plan or an operator-issued retry.
-6. Single-step shortcuts still allowed: `r3ngine_run_tool`, `r3ngine_start_subscan`, `r3ngine_retry_task`, `r3ngine_start_workflow`, pause/resume/stop — each still needs operator yes.
+6. Single-step shortcuts still allowed: `r3ngine_run_tool` (optionally with `tool_args` after `r3ngine_get_tool_args`), `r3ngine_start_subscan`, `r3ngine_retry_task`, `r3ngine_start_workflow`, pause/resume/stop — each still needs operator yes. Arg schemas are host-local (installed binary help cache); do not assume flag parity across deployments.
 7. On `failed` / `aborted` plans: summarize succeeded vs failed steps; **propose** retry of remaining steps — do not call `retry_followups` without yes.
 8. When a plan completes, aborts, or retries: update a `TodoNote` with evidence ids for successful steps and record abort/retry attempts.
 

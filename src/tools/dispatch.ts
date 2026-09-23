@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import type { RengineMcpClient } from '../client.js';
-import { formatSchema, registerPost } from './common.js';
+import { formatSchema, queryString, registerGet, registerPost } from './common.js';
 
 export function registerDispatchTools(server: McpServer, client: RengineMcpClient) {
   registerPost(
@@ -151,7 +151,7 @@ export function registerDispatchTools(server: McpServer, client: RengineMcpClien
     client,
     'r3ngine_run_tool',
     'Run singular tool',
-    'Run one pipeline tool or workflow on a single asset. Prefer propose_followups for multi-step plans. Requires operator approval context.',
+    'Run one pipeline tool or workflow on a single asset. Prefer propose_followups for multi-step plans. Fetch r3ngine_get_tool_args for this host before setting tool_args.',
     {
       tool: z.string(),
       asset_type: z.enum(['subdomain', 'endpoint', 'url', 'host']),
@@ -159,6 +159,7 @@ export function registerDispatchTools(server: McpServer, client: RengineMcpClien
       url: z.string().optional(),
       scan_history_id: z.number().int().optional(),
       scan_id: z.number().int().optional(),
+      tool_args: z.record(z.unknown()).optional(),
       response_format: formatSchema,
     },
     '/api/mcp/tools/run/',
@@ -168,6 +169,23 @@ export function registerDispatchTools(server: McpServer, client: RengineMcpClien
       asset_id: args.asset_id,
       url: args.url,
       scan_history_id: args.scan_history_id ?? args.scan_id,
+      tool_args: args.tool_args,
     }),
+  );
+  registerGet(
+    server,
+    client,
+    'r3ngine_get_tool_args',
+    'Get tool args schema',
+    'Return CLI/schema args for a pipeline tool from this host’s installed binary (--help cache). Call before r3ngine_run_tool when configuring tool_args. Pass refresh=true to force re-probe (rate-limited).',
+    {
+      tool: z.string(),
+      refresh: z.boolean().optional(),
+      response_format: formatSchema,
+    },
+    (args) =>
+      `/api/mcp/tools/${encodeURIComponent(args.tool)}/args/${queryString({
+        refresh: args.refresh ? 1 : undefined,
+      })}`,
   );
 }

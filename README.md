@@ -39,7 +39,7 @@ r3ngine-mcp is a thin, allowlisted MCP sidecar. Identity, hashed keys, sessions,
 
 🦾&nbsp;&nbsp; **Read-only recon** — projects, targets, scans, subdomains, endpoints, vulnerabilities, exposures, emails, employees, engines, dashboard KPIs, attack paths, and health. Thin `list_*` / `get_*` stay lean; `*_detail` tools add rollups, relations, and scan task status buckets.
 
-🗃️&nbsp;&nbsp; **Safe dispatch** — start/pause/resume/stop scans, subscans, email discovery, employee intel, APME trigger/recalculate, and named workflows. Auditor keys stay read-only.
+🗃️&nbsp;&nbsp; **Safe dispatch** — start/pause/resume/stop scans, subscans, email discovery, employee intel, APME trigger/recalculate, named workflows, **singular tool runs** (with validated `tool_args`), and **follow-up batch plans**. Auditor keys stay read-only.
 
 🔧&nbsp;&nbsp; **Both transports** — stdio for a local IDE (`npx r3ngine-mcp`) and Streamable HTTP behind nginx `/mcp` when Settings transport is `http` or `both`.
 
@@ -74,7 +74,7 @@ nginx:  /        → django
 
 This repo ships a **consultant** specialist (not a platform-dev agent): `AGENTS.md`, `docs/assessment-playbook.md`, `.cursor/agents/r3ngine-assessor.md`, `.claude/agents/r3ngine-assessor.md`.
 
-Use it with a connected r3ngine MCP server to analyse scan status and results, propose next allowed work (dispatch only after you approve), and write a client assessment pack when asked.
+Use it with a connected r3ngine MCP server to analyse scan status and results, propose next allowed work (singular tools / follow-up batches — dispatch only after you approve), verify OSINT staging when noisy, and write a client assessment pack when asked.
 
 In Cursor: invoke **r3ngine-assessor**.
 
@@ -97,6 +97,9 @@ In Cursor: invoke **r3ngine-assessor**.
 *   Read tools: `r3ngine_list_*`, thin `r3ngine_get_*`, `r3ngine_search`.
 *   Detail tools: `r3ngine_get_*_detail` for scan (status-bucketed tasks + rollups), target, vulnerability, subdomain, endpoint, exposure, and subscan. Use after thin list/get when drilling in.
 *   Notes: `r3ngine_list_notes`, `r3ngine_get_note`, `r3ngine_create_note`, `r3ngine_update_note` (no delete).
+*   Capabilities + singular run: `r3ngine_list_capabilities`, `r3ngine_get_engine_detail`, `r3ngine_get_tool_args` (host-local help cache), `r3ngine_run_tool` (optional `tool_args`). Call `get_tool_args` before configuring flags — schemas differ by installed binary version.
+*   Follow-ups: propose / get / list / update / approve / abort / retry + metrics; detail payloads may include capped `suggested_followups`.
+*   OSINT staging: `r3ngine_list_osint_staging`, `r3ngine_verify_osint_staging` (`agent_verified` badges in r3ngine).
 *   Dispatch tools: scan lifecycle, **subscans**, intel jobs, APME, named workflows.
 *   Payloads omit API Vault secrets, `results_dir` paths, `curl_command`, and email passwords.
 

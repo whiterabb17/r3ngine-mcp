@@ -9,6 +9,7 @@
 - OSINT staging list + agent verify: `r3ngine_list_osint_staging`, `r3ngine_verify_osint_staging`
 - `r3ngine-osint` sub-agent + curated `skills/osint/` (Spiderfoot skill primary only when scan includes Spiderfoot)
 - Capability catalog and singular tool run: `r3ngine_list_capabilities`, `r3ngine_get_engine_detail`, `r3ngine_run_tool`
+- `r3ngine_get_tool_args` + optional `tool_args` on `r3ngine_run_tool` (host-local help cache; call get_tool_args before configuring flags)
 - Follow-up batch plans: `r3ngine_propose_followups`, `r3ngine_get_followup_plan`, `r3ngine_list_followups`, `r3ngine_update_followups`, `r3ngine_approve_followups`, `r3ngine_abort_followups`, `r3ngine_retry_followups`, `r3ngine_get_followup_metrics`
 - Detail payloads include capped `suggested_followups`
 - Assessor playbook/AGENTS batch-plan / OSINT handoff loop and curated interpret skills under `skills/`
@@ -16,7 +17,9 @@
 
 ### Notes
 
-- Requires matching r3ngine APIs: `/api/mcp/osint-staging/`, follow-ups, capabilities, tool run, and `OsintStaging.agent_verified`.
+- Requires matching r3ngine APIs: `/api/mcp/osint-staging/`, follow-ups, capabilities, tool run / tool args, and `OsintStaging.agent_verified`.
+- Singular runs on r3ngine use `single_tool_*` timeline activity names and host-scoped targets so they do not claim or finalize pipeline scan tasks.
+- Arg schemas are host-local (installed binary help cache); do not assume flag parity across deployments — always call `r3ngine_get_tool_args` first.
 
 ## [1.0.2] - 2026-09-23
 

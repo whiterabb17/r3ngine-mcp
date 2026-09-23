@@ -43,6 +43,7 @@ const expected = [
   'r3ngine_retry_task',
   'r3ngine_start_subscan',
   'r3ngine_run_tool',
+  'r3ngine_get_tool_args',
   'r3ngine_list_followups',
   'r3ngine_get_followup_plan',
   'r3ngine_get_followup_metrics',

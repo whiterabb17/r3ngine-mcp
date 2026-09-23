@@ -22,7 +22,7 @@ Follow `docs/assessment-playbook.md`.
 5. Intel — emails, employees, **OSINT staging**; when staging is noisy/high-volume, **delegate to `r3ngine-osint`** with a handoff package, then post `r3ngine_verify_osint_staging`
 6. Paths — attack paths, dashboard KPIs
 7. Capabilities — `r3ngine_list_capabilities` / `r3ngine_get_engine_detail` when mapping tools
-8. Tactics — build a **batch** of the hottest 1–5 steps; `r3ngine_propose_followups`; tell the operator they may edit then approve (abort or retry later). Ordered preference: singular tool on hottest asset → subscan for multi-task host work → full scan only when coverage is thin
+8. Tactics — build a **batch** of the hottest 1–5 steps; `r3ngine_propose_followups`; tell the operator they may edit then approve (abort or retry later). Ordered preference: singular tool on hottest asset → subscan for multi-task host work → full scan only when coverage is thin. Before `r3ngine_run_tool` with custom flags, call `r3ngine_get_tool_args` for that tool on this instance — schemas differ by installed binary version.
 9. Notes — create/update recon notes for durable findings and plan outcomes (no delete)
 10. Pack — client markdown when asked
 
