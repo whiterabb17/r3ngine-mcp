@@ -3,6 +3,7 @@
  * Install, configure, and smoke-start r3ngine-mcp.
  *
  *   node scripts/install.mjs --url https://host --key r3n_mcp_… --yes
+ *   node scripts/install.mjs --update
  *   npm run setup -- --transport http --detach
  */
 import { spawn, spawnSync } from 'node:child_process';
@@ -41,6 +42,7 @@ export function parseArgs(argv) {
     ca: undefined,
     stop: false,
     restart: false,
+    update: false,
   };
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
@@ -92,6 +94,9 @@ export function parseArgs(argv) {
       case '--restart':
         out.restart = true;
         break;
+      case '--update':
+        out.update = true;
+        break;
       case '-y':
       case '--yes':
         out.yes = true;
@@ -106,6 +111,12 @@ export function parseArgs(argv) {
   }
   if (out.stop && out.restart) {
     throw new Error('use --stop or --restart, not both');
+  }
+  if (out.update && out.stop) {
+    throw new Error('use --update or --stop, not both');
+  }
+  if (out.update && out.skipBuild) {
+    throw new Error('cannot use --skip-build with --update');
   }
   if (!['stdio', 'http'].includes(out.transport)) {
     throw new Error('transport must be stdio or http');
@@ -471,6 +482,73 @@ export function stopMcpServer(pidPath = PID_PATH) {
   return { stopped: true, pid };
 }
 
+export function childEnvFromFile(fileEnv) {
+  return {
+    R3NGINE_URL: fileEnv.R3NGINE_URL,
+    MCP_TRANSPORT: fileEnv.MCP_TRANSPORT || 'http',
+    MCP_BIND: fileEnv.MCP_BIND || '127.0.0.1',
+    MCP_PORT: fileEnv.MCP_PORT || '3100',
+    R3NGINE_MCP_API_KEY: fileEnv.R3NGINE_MCP_API_KEY,
+    R3NGINE_CA_CERT: fileEnv.R3NGINE_CA_CERT,
+    NODE_EXTRA_CA_CERTS: fileEnv.NODE_EXTRA_CA_CERTS,
+    R3NGINE_TLS_SERVER_NAME: fileEnv.R3NGINE_TLS_SERVER_NAME,
+  };
+}
+
+export function rebuildMcpServer() {
+  log('Installing npm dependencies…');
+  const lock = path.join(ROOT, 'package-lock.json');
+  run(npmCmd(), fs.existsSync(lock) ? ['ci'] : ['install']);
+  log('Building TypeScript…');
+  run(npmCmd(), ['run', 'build']);
+  if (!fs.existsSync(DIST)) {
+    throw new Error('Build did not produce dist/index.js');
+  }
+}
+
+export function startDetachedHttp(childEnv, pidPath = PID_PATH) {
+  const bg = spawn(nodeBin(), [DIST], {
+    cwd: ROOT,
+    env: { ...process.env, ...childEnv },
+    detached: true,
+    stdio: 'ignore',
+    windowsHide: true,
+  });
+  fs.writeFileSync(pidPath, String(bg.pid));
+  bg.unref();
+  return bg.pid;
+}
+
+/** Rebuild from source using existing .env; restart detached HTTP if it was running. */
+export function updateMcpServer(opts = {}) {
+  if (!fs.existsSync(ENV_PATH)) {
+    throw new Error('Cannot update: .env is missing. Run setup first (node scripts/install.mjs --url … --key …).');
+  }
+  const fileEnv = parseEnvFile(fs.readFileSync(ENV_PATH, 'utf8'));
+  if (!fileEnv.R3NGINE_URL) {
+    throw new Error('Cannot update: .env is missing R3NGINE_URL. Run setup first.');
+  }
+  const priorPid = readPidFile(PID_PATH);
+  const wasRunning = Boolean(priorPid && pidIsAlive(priorPid));
+  const stopResult = stopMcpServer();
+  if (stopResult.stopped) log(`Stopped MCP server (pid ${stopResult.pid}) for update`);
+  rebuildMcpServer();
+  const childEnv = childEnvFromFile(fileEnv);
+  const transport = childEnv.MCP_TRANSPORT || 'stdio';
+  const shouldRestart = wasRunning || opts.restart || opts.detach;
+  if (transport === 'stdio') {
+    log('Updated. stdio is owned by your IDE — reload the r3ngine MCP server in Cursor/VS Code/Claude.');
+    return { rebuilt: true, restarted: false, transport };
+  }
+  if (!shouldRestart) {
+    log('Updated. Start with: npm start  (or re-run with --detach / --restart)');
+    return { rebuilt: true, restarted: false, transport };
+  }
+  const pid = startDetachedHttp(childEnv);
+  log(`HTTP server updated and running (pid ${pid})`);
+  return { rebuilt: true, restarted: true, transport, pid };
+}
+
 export function nodeBin(env = process.env) {
   return env.NODE || 'node';
 }
@@ -705,6 +783,7 @@ function usage() {
   --detach                 keep HTTP server running in the background
   --stop                   stop the detached HTTP MCP server
   --restart                stop then start the detached HTTP MCP server from .env
+  --update                 rebuild from existing .env (npm ci + tsc); restart HTTP if it was running
   --skip-build             skip npm install / tsc if dist/ exists
   --ca <full-path>         TLS CA on this computer (agents get this path)
   --yes                    non-interactive; fail if URL/key/cert missing
@@ -718,6 +797,11 @@ export async function main(argv = process.argv.slice(2)) {
     return 0;
   }
   requireNodeVersion();
+  if (opts.update) {
+    log(`r3ngine-mcp update  (Node ${process.versions.node}, ${ROOT})`);
+    updateMcpServer(opts);
+    return 0;
+  }
   if (opts.stop || opts.restart) {
     const result = stopMcpServer();
     if (result.stopped) log(`Stopped MCP server (pid ${result.pid})`);
@@ -727,30 +811,13 @@ export async function main(argv = process.argv.slice(2)) {
     const url = fileEnv.R3NGINE_URL;
     if (!url) throw new Error('Cannot restart: .env is missing R3NGINE_URL. Run setup first.');
     if (!fs.existsSync(DIST)) throw new Error('Cannot restart: dist/index.js is missing. Run setup first.');
-    const childEnv = {
-      R3NGINE_URL: url,
-      MCP_TRANSPORT: fileEnv.MCP_TRANSPORT || 'http',
-      MCP_BIND: fileEnv.MCP_BIND || '127.0.0.1',
-      MCP_PORT: fileEnv.MCP_PORT || '3100',
-      R3NGINE_MCP_API_KEY: fileEnv.R3NGINE_MCP_API_KEY,
-      R3NGINE_CA_CERT: fileEnv.R3NGINE_CA_CERT,
-      NODE_EXTRA_CA_CERTS: fileEnv.NODE_EXTRA_CA_CERTS,
-      R3NGINE_TLS_SERVER_NAME: fileEnv.R3NGINE_TLS_SERVER_NAME,
-    };
+    const childEnv = childEnvFromFile(fileEnv);
     if ((childEnv.MCP_TRANSPORT || 'stdio') === 'stdio') {
       log('stdio is owned by your IDE. Reload the r3ngine MCP server in Cursor/VS Code/Claude.');
       return 0;
     }
-    const bg = spawn(nodeBin(), [DIST], {
-      cwd: ROOT,
-      env: { ...process.env, ...childEnv },
-      detached: true,
-      stdio: 'ignore',
-      windowsHide: true,
-    });
-    fs.writeFileSync(PID_PATH, String(bg.pid));
-    bg.unref();
-    log(`HTTP server restarted (pid ${bg.pid})`);
+    const pid = startDetachedHttp(childEnv);
+    log(`HTTP server restarted (pid ${pid})`);
     return 0;
   }
   log(`r3ngine-mcp setup  (Node ${process.versions.node}, ${ROOT})`);
@@ -763,11 +830,7 @@ export async function main(argv = process.argv.slice(2)) {
   const key = needsKey ? validateKey(prompted.key || '') : undefined;
 
   if (!opts.skipBuild || !fs.existsSync(DIST)) {
-    log('Installing npm dependencies…');
-    const lock = path.join(ROOT, 'package-lock.json');
-    run(npmCmd(), fs.existsSync(lock) ? ['ci'] : ['install']);
-    log('Building TypeScript…');
-    run(npmCmd(), ['run', 'build']);
+    rebuildMcpServer();
   }
   if (!fs.existsSync(DIST)) {
     throw new Error('Build did not produce dist/index.js');

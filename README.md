@@ -177,6 +177,14 @@ npm run setup -- --url https://your-r3ngine-host --key r3n_mcp_… --yes
 
 `npm run setup` runs `scripts/install.mjs` (install, build, `.env`, session probe, smoke start). Copy `.env.example` if you prefer to fill values first.
 
+To refresh an existing install (rebuild from current checkout / after `git pull`; restarts detached HTTP if it was running):
+
+```bash
+npm run setup -- --update
+# or from r3ngine:
+node scripts/install-mcp.mjs --update
+```
+
 Required env: `R3NGINE_URL`, `R3NGINE_MCP_API_KEY`. HTTP mode additionally uses `MCP_TRANSPORT=http`, `MCP_BIND`, `MCP_PORT`. Optional: `MCP_UNAUTH_MAX` and `MCP_UNAUTH_WINDOW_MS` (unauthorized HTTP rate limit; default 10 failures per IP per minute).
 
 Missing URL or key exits `1` on **stderr** (never stdout — that would break stdio MCP).

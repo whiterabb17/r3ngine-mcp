@@ -24,6 +24,7 @@ import {
   suggestedCopyDest,
   expectedCaPath,
   requireCaFile,
+  childEnvFromFile,
 } from './install.mjs';
 
 test('parseArgs reads transport and refuses unknown flags', () => {
@@ -32,8 +33,24 @@ test('parseArgs reads transport and refuses unknown flags', () => {
   assert.equal(opts.yes, true);
   assert.equal(parseArgs(['--stop']).stop, true);
   assert.equal(parseArgs(['--restart']).restart, true);
+  assert.equal(parseArgs(['--update']).update, true);
   assert.throws(() => parseArgs(['--stop', '--restart']), /not both/);
+  assert.throws(() => parseArgs(['--update', '--stop']), /update or --stop/);
+  assert.throws(() => parseArgs(['--update', '--skip-build']), /skip-build/);
   assert.throws(() => parseArgs(['--nope']), /Unknown argument/);
+});
+
+test('childEnvFromFile maps .env keys for restart/update', () => {
+  const env = childEnvFromFile({
+    R3NGINE_URL: 'https://h',
+    MCP_TRANSPORT: 'http',
+    MCP_BIND: '0.0.0.0',
+    MCP_PORT: '3200',
+    R3NGINE_MCP_API_KEY: 'r3n_mcp_abcdefghijklmnop',
+  });
+  assert.equal(env.R3NGINE_URL, 'https://h');
+  assert.equal(env.MCP_PORT, '3200');
+  assert.equal(env.MCP_BIND, '0.0.0.0');
 });
 
 test('validateUrl and validateKey', () => {

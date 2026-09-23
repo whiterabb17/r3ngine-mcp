@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- `--update` on `scripts/install.mjs`: rebuild (`npm ci` + `tsc`) from existing `.env`, restart detached HTTP if it was running (or with `--detach` / `--restart`). From r3ngine, `node scripts/install-mcp.mjs --update` git-pulls the checkout and forwards `--update`.
+
 ## [1.0.2] - 2026-09-23
 
 ### Added
