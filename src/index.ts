@@ -48,17 +48,26 @@ async function main() {
   }
 
   if (!httpMode) {
+    // Connect stdio before opening a Django session so Cursor's initialize /
+    // tools/list handshake is not blocked on TLS or /api/mcp/sessions/.
     const client = new RengineMcpClient(url, apiKey as string);
-    const identity = resolveAgentIdentity();
-    const sessionId = await openSession(client, {
-      name: 'r3ngine-mcp',
-      version: '1.0.2',
-      transport: 'stdio',
-    }, identity);
-    startHeartbeat(client, sessionId);
     const server = createServer(client);
     const transport = new StdioServerTransport();
     await server.connect(transport);
+    try {
+      const identity = resolveAgentIdentity();
+      const sessionId = await openSession(client, {
+        name: 'r3ngine-mcp',
+        version: '1.0.2',
+        transport: 'stdio',
+      }, identity);
+      startHeartbeat(client, sessionId);
+    } catch (error) {
+      console.error(
+        'MCP session open failed after stdio connect:',
+        error instanceof Error ? error.message : String(error),
+      );
+    }
     return;
   }
 
