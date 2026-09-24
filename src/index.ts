@@ -8,6 +8,7 @@ import { createServer } from './server.js';
 import { openSession, startHeartbeat } from './session.js';
 import { resolveAgentIdentity } from './identity.js';
 import { UnauthRateLimit, clientIp } from './ratelimit.js';
+import { PACKAGE_NAME, PACKAGE_VERSION } from './version.js';
 
 const HTTP_DISABLED =
   'HTTP MCP is disabled. Enable HTTP or both in Settings → MCP Access, or use stdio.';
@@ -57,8 +58,8 @@ async function main() {
     try {
       const identity = resolveAgentIdentity();
       const sessionId = await openSession(client, {
-        name: 'r3ngine-mcp',
-        version: '1.0.2',
+        name: PACKAGE_NAME,
+        version: PACKAGE_VERSION,
         transport: 'stdio',
       }, identity);
       startHeartbeat(client, sessionId);
@@ -82,8 +83,8 @@ async function main() {
     if (existing) return existing;
     const client = new RengineMcpClient(url as string, secret);
     const sessionId = await openSession(client, {
-      name: 'r3ngine-mcp',
-      version: '1.0.2',
+      name: PACKAGE_NAME,
+      version: PACKAGE_VERSION,
       transport: 'http',
     }, resolveAgentIdentity(process.env, { provider: 'http-sidecar' }));
     startHeartbeat(client, sessionId);

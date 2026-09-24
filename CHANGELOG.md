@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-## [1.0.3] - 2026-09-23
+## [1.1.0] - 2026-09-24
 
 ### Added
 
@@ -15,11 +15,31 @@
 - Assessor playbook/AGENTS batch-plan / OSINT handoff loop and curated interpret skills under `skills/`
 - `--update` on `scripts/install.mjs`: rebuild (`npm ci` + `tsc`) from existing `.env`, restart detached HTTP if it was running (or with `--detach` / `--restart`). From r3ngine, `node scripts/install-mcp.mjs --update` git-pulls the checkout and forwards `--update`.
 
+### Changed
+
+- Package `name` / `version` for MCP sessions and `McpServer` metadata are generated from `package.json` at build time (`scripts/sync-version.mjs` → `src/version.ts`).
+
+### Fixed
+
+- Connect stdio before opening a Django MCP session so Cursor `initialize` / `tools/list` is not blocked on TLS or `/api/mcp/sessions/`.
+- Stringify `tool` when building the `get_tool_args` URL path.
+
 ### Notes
 
 - Requires matching r3ngine APIs: `/api/mcp/osint-staging/`, follow-ups, capabilities, tool run / tool args, and `OsintStaging.agent_verified`.
 - Singular runs on r3ngine use `single_tool_*` timeline activity names and host-scoped targets so they do not claim or finalize pipeline scan tasks.
 - Arg schemas are host-local (installed binary help cache); do not assume flag parity across deployments — always call `r3ngine_get_tool_args` first.
+
+## [1.0.3] - 2026-09-23
+
+### Added
+
+- Notes tools: `r3ngine_list_notes`, `r3ngine_get_note`, `r3ngine_create_note`, `r3ngine_update_note` (no delete via MCP)
+- Note hygiene guidance in assessor playbook / `skills/note-hygiene.md`
+
+### Notes
+
+- Requires matching r3ngine `/api/mcp/notes/` endpoints. List/get for any MCP key; create/update for pentester/sys-admin keys (`TodoNote`). Delete remains UI-only.
 
 ## [1.0.2] - 2026-09-23
 
