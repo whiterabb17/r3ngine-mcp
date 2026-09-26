@@ -1,30 +1,22 @@
 # Changelog
 
-## [1.4.0] - 2026-09-26
-
-### Added
-
-- Portable allowlisted Anthropic cyber skills sync (`scripts/sync-cyber-skills.mjs`, `skills/allowlist.json`, `skills/vendor/anthropic/`)
-- Install/update and Docker build run skill sync so operators do not need `~/.claude/skills`
-- Specialist agent hardening (skill bootstrap, self-critique, success criteria, lessons) + evals contracts
-
-### Notes
-
-- On-demand: `npm run sync-skills:missing` or `node scripts/sync-cyber-skills.mjs --missing-only`
-- Denylist refuses attacking/exploiting/phishing/bruteforce/payload-style skill ids
-
 ## [1.3.0] - 2026-09-26
 
 ### Added
 
 - SAFE vulnerability validation tools: `r3ngine_analyze_vulnerability`, `r3ngine_enrich_vulnerability`, `r3ngine_validate_vulnerability`, `r3ngine_enrich_attack_path`
 - `r3ngine-vuln-validator` agent + curated `skills/vuln-validation/` (interpret/enrich only; no exploit craft)
+- Portable allowlisted Anthropic cyber skills sync (`scripts/sync-cyber-skills.mjs`, `skills/allowlist.json`, `skills/vendor/anthropic/`)
+- Install/update and Docker build run skill sync so operators do not need `~/.claude/skills`
+- Specialist agent hardening (skill bootstrap, self-critique, success criteria, lessons) + evals contracts
 
 ### Notes
 
 - Requires r3ngine `/api/mcp/vulnerabilities/<id>/analyze|enrich|validation/` and `/api/mcp/attack-paths/<path_id>/enrich/`
 - `verified` writes require `confirm_verified=true` and confidence ≥ 0.8
 - Enrichment rejects forbidden keys (`payload`, `exploit_code`, etc.)
+- On-demand skills: `npm run sync-skills:missing` or `node scripts/sync-cyber-skills.mjs --missing-only`
+- Denylist refuses attacking/exploiting/phishing/bruteforce/payload-style skill ids
 
 ## [1.2.0] - 2026-09-26
 
