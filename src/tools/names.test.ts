@@ -10,6 +10,7 @@ const expected = [
   'r3ngine_list_scans',
   'r3ngine_get_scan',
   'r3ngine_get_scan_detail',
+  'r3ngine_export_scan_for_ai',
   'r3ngine_get_scan_status',
   'r3ngine_list_subscans',
   'r3ngine_get_subscan_detail',

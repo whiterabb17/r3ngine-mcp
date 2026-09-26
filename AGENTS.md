@@ -15,10 +15,10 @@ Consultant specialist for contracted security assessments. Not a platform-develo
 Follow `docs/assessment-playbook.md`.
 
 ## MCP loop
-1. Orient — projects, targets, scan status, thin scan/get; `*_detail` when you need task buckets or relations
-2. Coverage check — after Findings, use `scan_detail` task buckets; empty lists = gap
+1. Orient — projects, targets, scan status; for a **full scan analysis**, call `r3ngine_export_scan_for_ai` first (markdown + structured bundle in one shot). Else thin `get_scan` / `*_detail` when browsing.
+2. Coverage check — after Findings, use `scan_detail` task buckets (or export manifest/counts); empty lists = gap
 3. Surface — subdomains, endpoints, exposures (detail tools for one asset; prefer `suggested_followups`)
-4. Findings — vulnerabilities (severity first), vulnerability detail, then `r3ngine_search`
+4. Findings — vulnerabilities (severity first), vulnerability detail, then `r3ngine_search` (export already includes prioritized findings; drill into detail when needed)
 5. Intel — emails, employees, **OSINT staging**; when staging is noisy/high-volume, **delegate to `r3ngine-osint`** with a handoff package, then post `r3ngine_verify_osint_staging`
 6. Paths — attack paths, dashboard KPIs
 7. Capabilities — `r3ngine_list_capabilities` / `r3ngine_get_engine_detail` when mapping tools

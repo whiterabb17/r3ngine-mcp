@@ -1,6 +1,14 @@
 # Changelog
 
-## [Unreleased]
+## [1.2.0] - 2026-09-26
+
+### Added
+
+- `r3ngine_export_scan_for_ai` — full Analyst Assist assessment export for one scan (same payload as the UI Export for AI ZIP): markdown overview, triage prompt, structured bundle, and manifest in one call. Prefer for complete scan analysis.
+
+### Notes
+
+- Requires r3ngine `/api/mcp/scans/<id>/export-ai/`.
 
 ## [1.1.0] - 2026-09-24
 

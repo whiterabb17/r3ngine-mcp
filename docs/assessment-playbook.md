@@ -13,6 +13,7 @@ Tool names must match the sidecar catalog (`src/tools/index.ts`).
 | One target | `r3ngine_get_target`; drill-down: `r3ngine_get_target_detail` |
 | Live / pending / recent | `r3ngine_get_scan_status` |
 | Scan record | `r3ngine_get_scan`, `r3ngine_list_scans`; drill-down: `r3ngine_get_scan_detail` (task buckets + finding rollups + `suggested_followups`) |
+| **Full scan analysis** | `r3ngine_export_scan_for_ai` — same Analyst Assist export as the UI Export for AI button (markdown + prompt + structured bundle). Prefer this over paging many list tools when analysing one scan end-to-end. |
 | Child jobs | `r3ngine_list_subscans`; drill-down: `r3ngine_get_subscan_detail` |
 | Notes | `r3ngine_list_notes`, `r3ngine_get_note` |
 | Instance | `r3ngine_get_system_health` |
