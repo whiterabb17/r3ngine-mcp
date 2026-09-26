@@ -495,7 +495,7 @@ export function childEnvFromFile(fileEnv) {
   };
 }
 
-export function rebuildMcpServer() {
+export function rebuildMcpServer({ syncMissingOnly = true } = {}) {
   log('Installing npm dependencies…');
   const lock = path.join(ROOT, 'package-lock.json');
   run(npmCmd(), fs.existsSync(lock) ? ['ci'] : ['install']);
@@ -503,6 +503,32 @@ export function rebuildMcpServer() {
   run(npmCmd(), ['run', 'build']);
   if (!fs.existsSync(DIST)) {
     throw new Error('Build did not produce dist/index.js');
+  }
+  syncCyberSkillsDuringInstall({ missingOnly: syncMissingOnly });
+}
+
+function syncCyberSkillsDuringInstall({ missingOnly = true } = {}) {
+  const syncScript = path.join(ROOT, 'scripts', 'sync-cyber-skills.mjs');
+  if (!fs.existsSync(syncScript)) {
+    log('Cyber skills sync script missing; skipping');
+    return;
+  }
+  log(
+    missingOnly
+      ? 'Syncing missing allowlisted Anthropic cyber skills…'
+      : 'Refreshing allowlisted Anthropic cyber skills…',
+  );
+  const args = [syncScript];
+  if (missingOnly) args.push('--missing-only');
+  const result = spawnSync(nodeBin(), args, {
+    cwd: ROOT,
+    encoding: 'utf8',
+    windowsHide: true,
+  });
+  if (result.status !== 0) {
+    const detail = (result.stderr || result.stdout || `exit ${result.status}`).trim();
+    log(`WARNING: cyber skills sync failed: ${detail}`);
+    log('Re-run later: node scripts/sync-cyber-skills.mjs [--missing-only]');
   }
 }
 
@@ -532,7 +558,7 @@ export function updateMcpServer(opts = {}) {
   const wasRunning = Boolean(priorPid && pidIsAlive(priorPid));
   const stopResult = stopMcpServer();
   if (stopResult.stopped) log(`Stopped MCP server (pid ${stopResult.pid}) for update`);
-  rebuildMcpServer();
+  rebuildMcpServer({ syncMissingOnly: false });
   const childEnv = childEnvFromFile(fileEnv);
   const transport = childEnv.MCP_TRANSPORT || 'stdio';
   const shouldRestart = wasRunning || opts.restart || opts.detach;
@@ -783,10 +809,14 @@ function usage() {
   --detach                 keep HTTP server running in the background
   --stop                   stop the detached HTTP MCP server
   --restart                stop then start the detached HTTP MCP server from .env
-  --update                 rebuild from existing .env (npm ci + tsc); restart HTTP if it was running
+  --update                 rebuild from existing .env (npm ci + tsc); refresh cyber skills; restart HTTP if it was running
   --skip-build             skip npm install / tsc if dist/ exists
   --ca <full-path>         TLS CA on this computer (agents get this path)
   --yes                    non-interactive; fail if URL/key/cert missing
+
+Cyber skills (portable):
+  Allowlisted Anthropic skills sync into skills/vendor/anthropic/ during build/update.
+  Manual: node scripts/sync-cyber-skills.mjs [--missing-only]
 `);
 }
 

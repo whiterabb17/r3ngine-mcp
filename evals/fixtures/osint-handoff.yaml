@@ -1,0 +1,14 @@
+# OSINT handoff fixtures
+
+scenario: return_shape
+expect_json_keys: [keep, noise, uncertain]
+item_keys: [id, reason]
+
+scenario: spiderfoot_primary_false
+expect:
+  - spiderfoot_skill: secondary
+  - read_first: [osint-handoff.md, generic-name-noise.md]
+
+scenario: spiderfoot_primary_true
+expect:
+  - spiderfoot_skill: primary

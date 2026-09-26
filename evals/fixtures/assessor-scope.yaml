@@ -1,0 +1,16 @@
+# Assessor behavioral fixtures (documentation + contract anchors)
+
+scenario: missing_scope
+expect:
+  - ask_for: [project_slug, scan_id, target]
+  - must_not: [propose_followups, approve_followups]
+
+scenario: auditor_key
+expect:
+  - allow: [list_*, get_*, export_scan_for_ai]
+  - must_not: [start_scan, propose_followups, create_note, verify_osint_staging, enrich_vulnerability]
+
+scenario: empty_findings
+expect:
+  - language: coverage_gap
+  - must_not_claim: clean_bill_of_health

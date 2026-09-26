@@ -9,6 +9,7 @@ import { registerOsintTools } from './osint.js';
 import { registerProjectTools } from './projects.js';
 import { registerScanTools } from './scans.js';
 import { registerTargetTools } from './targets.js';
+import { registerValidationTools } from './validation.js';
 
 export const TOOL_NAMES = [
   'r3ngine_list_projects',
@@ -28,6 +29,9 @@ export const TOOL_NAMES = [
   'r3ngine_get_endpoint_detail',
   'r3ngine_list_vulnerabilities',
   'r3ngine_get_vulnerability_detail',
+  'r3ngine_analyze_vulnerability',
+  'r3ngine_enrich_vulnerability',
+  'r3ngine_validate_vulnerability',
   'r3ngine_list_exposures',
   'r3ngine_get_exposure_detail',
   'r3ngine_list_emails',
@@ -39,6 +43,7 @@ export const TOOL_NAMES = [
   'r3ngine_search',
   'r3ngine_get_dashboard',
   'r3ngine_get_attack_paths',
+  'r3ngine_enrich_attack_path',
   'r3ngine_list_engines',
   'r3ngine_get_engine_detail',
   'r3ngine_list_capabilities',
@@ -79,6 +84,7 @@ export function registerTools(server: McpServer, client: RengineMcpClient) {
   registerTargetTools(server, client);
   registerScanTools(server, client);
   registerFindingTools(server, client);
+  registerValidationTools(server, client);
   registerOsintTools(server, client);
   registerNoteTools(server, client);
   registerApmeTools(server, client);

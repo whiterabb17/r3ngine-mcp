@@ -4,6 +4,10 @@ Plan, then execute. Use only the MCP tools for the current phase. Do not call th
 
 Tool names must match the sidecar catalog (`src/tools/index.ts`).
 
+## Skills availability
+
+Interpret skills ship **inside** `r3ngine-mcp/skills/` (curated + `vendor/anthropic/` allowlist). They are installed by MCP setup/update via `scripts/sync-cyber-skills.mjs`. If a vendor skill is missing: `node scripts/sync-cyber-skills.mjs --missing-only`. Never depend on operator-local `~/.claude/skills`.
+
 ## 1. Orient
 
 | Need | Tool |
@@ -39,6 +43,7 @@ Summarize counts and notable hosts. Prefer server `suggested_followups` on detai
 | Need | Tool |
 |------|------|
 | Vulns | `r3ngine_list_vulnerabilities`; drill-down: `r3ngine_get_vulnerability_detail` |
+| SAFE packaged context | `r3ngine_analyze_vulnerability` |
 | Lookup | `r3ngine_search` |
 
 Order by severity, then asset. Group noisy TLS/cipher families by host.
@@ -46,6 +51,8 @@ Order by severity, then asset. Group noisy TLS/cipher families by host.
 Each finding: title, severity, asset, scan id, evidence from MCP, impact, remediation.
 
 **Coverage check (required after Findings):** call `r3ngine_get_scan_detail` and read `task_summary` / empty buckets. Empty success lists or failed tasks = gaps, not “clean.”
+
+**SAFE validation (required for hot findings):** package hottest vulns/paths per `skills/vuln-validation/vuln-handoff.md` and **delegate to `r3ngine-vuln-validator`**. The validator writes enrichment/validation via MCP; assessor does not craft exploits.
 
 Persist durable analyst notes with `r3ngine_create_note` / `r3ngine_update_note` (pentester keys). Never delete notes via MCP.
 
@@ -73,7 +80,8 @@ Do not put personal emails in the client exec summary unless they are in-scope f
 
 After enough surface + vulns:
 
-- `r3ngine_get_attack_paths`
+- `r3ngine_get_attack_paths` (includes any `agent_path_review`)
+- `r3ngine_enrich_attack_path` via **`r3ngine-vuln-validator`** for feasibility critique
 - `r3ngine_get_dashboard` (`project_slug` required)
 
 If APME is empty, say so and optionally propose `r3ngine_trigger_apme` / `r3ngine_recalculate_apme` (approval required).

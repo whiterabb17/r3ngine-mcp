@@ -1,0 +1,21 @@
+# Validator gate fixtures
+
+scenario: verified_without_confirm
+expect:
+  - mcp_status: 400
+  - error_contains: confirm_verified
+
+scenario: verified_low_confidence
+expect:
+  - mcp_status: 400
+  - confidence_max_exclusive: 0.8
+
+scenario: forbidden_payload_key
+expect:
+  - mcp_status: 400
+  - error_contains: forbidden
+
+scenario: path_fantasy
+expect:
+  - feasibility: fantasy
+  - include: [blocked_reasons, missing_prereqs, rationale]

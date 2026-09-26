@@ -1,0 +1,21 @@
+{
+  "upstream_repo": "https://github.com/mukul975/Anthropic-Cybersecurity-Skills.git",
+  "upstream_ref": "main",
+  "commit": "54a798831d2266a3ca61ce68a7acb80b81160d57",
+  "synced_at": "2026-09-26T15:35:24.465Z",
+  "skills": [
+    "conducting-external-reconnaissance-with-osint",
+    "performing-ai-driven-osint-correlation",
+    "performing-osint-with-spiderfoot",
+    "performing-web-application-vulnerability-triage",
+    "prioritizing-vulnerabilities-with-cvss-scoring",
+    "implementing-epss-score-for-vulnerability-prioritization",
+    "performing-cve-prioritization-with-kev-catalog",
+    "mapping-mitre-attack-techniques",
+    "implementing-threat-modeling-with-mitre-attack",
+    "performing-threat-modeling-with-owasp-threat-dragon",
+    "triaging-vulnerabilities-with-ssvc-framework",
+    "implementing-attack-path-analysis-with-xm-cyber"
+  ],
+  "allowlist_count": 12
+}

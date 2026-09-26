@@ -9,12 +9,12 @@
 </p>
 
 <p align="center">
-<a href="https://github.com/whiterabb17/r3ngine-mcp/releases" target="_blank"><img src="https://img.shields.io/badge/version-v1.1.0-informational?&logo=none" alt="r3ngine MCP Version" /></a>&nbsp;<a href="https://github.com/whiterabb17/r3ngine/releases" target="_blank"><img src="https://img.shields.io/badge/compatible_with-r3ngine_v3.7.6+-warning?&logo=none" alt="Compatible r3ngine version" /></a><br/><a href="https://www.gnu.org/licenses/gpl-3.0" target="_blank"><img src="https://img.shields.io/badge/License-GPLv3-red.svg?&logo=none" alt="License" /></a>&nbsp;<a href="https://modelcontextprotocol.io" target="_blank"><img src="https://img.shields.io/badge/Protocol-MCP-blue.svg?&logo=none" alt="MCP" /></a>&nbsp;<a href="https://www.typescriptlang.org/" target="_blank"><img src="https://img.shields.io/badge/Language-TypeScript-3178C6.svg?&logo=none" alt="TypeScript" /></a>
+<a href="https://github.com/whiterabb17/r3ngine-mcp/releases" target="_blank"><img src="https://img.shields.io/badge/version-v1.4.0-informational?&logo=none" alt="r3ngine MCP Version" /></a>&nbsp;<a href="https://github.com/whiterabb17/r3ngine/releases" target="_blank"><img src="https://img.shields.io/badge/compatible_with-r3ngine_v3.7.6+-warning?&logo=none" alt="Compatible r3ngine version" /></a><br/><a href="https://www.gnu.org/licenses/gpl-3.0" target="_blank"><img src="https://img.shields.io/badge/License-GPLv3-red.svg?&logo=none" alt="License" /></a>&nbsp;<a href="https://modelcontextprotocol.io" target="_blank"><img src="https://img.shields.io/badge/Protocol-MCP-blue.svg?&logo=none" alt="MCP" /></a>&nbsp;<a href="https://www.typescriptlang.org/" target="_blank"><img src="https://img.shields.io/badge/Language-TypeScript-3178C6.svg?&logo=none" alt="TypeScript" /></a>
 </p>
 
 <h4>r3ngine MCP: Agent Access Without Giving Away the Keys to the Kingdom</h4>
 <p>
-  r3ngine-mcp is the official Model Context Protocol server for the <b>r3ngine 3.0 Phoenix Rebirth</b>. Cursor, Claude Desktop, VS Code, or any MCP-capable agent can list recon data and queue allowed scans using a hashed API key — without delete/edit tools, database URLs, or filesystem mounts. The process speaks MCP only and is an HTTP client of <code>/api/mcp/</code> on your instance.
+  r3ngine-mcp is the official Model Context Protocol server for the <b>r3ngine 3.0 Phoenix Rebirth</b>. Cursor, Claude Desktop, VS Code, or any MCP-capable agent can list recon data, queue allowed scans, verify OSINT staging, and run <b>SAFE vulnerability / attack-path enrichment</b> (interpret-only) using a hashed API key — without delete/edit tools, database URLs, or filesystem mounts. Install/update syncs <b>portable allowlisted cyber skills</b> into this checkout. The process speaks MCP only and is an HTTP client of <code>/api/mcp/</code> on your instance.
 </p>
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
@@ -23,7 +23,7 @@
 
 * [About r3ngine-mcp](#about-r3ngine-mcp)
 * [Workflow](#workflow)
-* [Assessment agent](#assessment-agent)
+* [Assessment agents](#assessment-agents)
 * [Features](#features)
 * [Quick Installation](#quick-installation)
 * [What Agents Cannot Do](#what-agents-cannot-do)
@@ -70,13 +70,19 @@ nginx:  /        → django
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
-## Assessment agent
+## Assessment agents
 
-This repo ships a **consultant** specialist (not a platform-dev agent): `AGENTS.md`, `docs/assessment-playbook.md`, `.cursor/agents/r3ngine-assessor.md`, `.claude/agents/r3ngine-assessor.md`.
+This repo ships **consultant** specialists (not platform-dev agents): `AGENTS.md`, `docs/assessment-playbook.md`, and Cursor agents under `.cursor/agents/` (also mirrored for Claude where applicable).
 
-Use it with a connected r3ngine MCP server to analyse scan status and results, propose next allowed work (singular tools / follow-up batches — dispatch only after you approve), verify OSINT staging when noisy, and write a client assessment pack when asked.
+| Agent | Role |
+|-------|------|
+| **r3ngine-assessor** | Scan analysis, follow-ups, client pack |
+| **r3ngine-osint** | Noisy OSINT staging triage |
+| **r3ngine-vuln-validator** | SAFE vuln/path enrich + validation (no exploits) |
 
-In Cursor: invoke **r3ngine-assessor**.
+Skills live under `skills/` (curated) and `skills/vendor/anthropic/` (allowlisted upstream sync). Run `npm run sync-skills:missing` if vendor skills are absent. Never rely on `~/.claude/skills`.
+
+In Cursor: invoke the agent by name.
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
@@ -100,6 +106,8 @@ In Cursor: invoke **r3ngine-assessor**.
 *   Capabilities + singular run: `r3ngine_list_capabilities`, `r3ngine_get_engine_detail`, `r3ngine_get_tool_args` (host-local help cache), `r3ngine_run_tool` (optional `tool_args`). Call `get_tool_args` before configuring flags — schemas differ by installed binary version.
 *   Follow-ups: propose / get / list / update / approve / abort / retry + metrics; detail payloads may include capped `suggested_followups`.
 *   OSINT staging: `r3ngine_list_osint_staging`, `r3ngine_verify_osint_staging` (`agent_verified` badges in r3ngine).
+*   SAFE validation: `r3ngine_analyze_vulnerability`, `r3ngine_enrich_vulnerability`, `r3ngine_validate_vulnerability`, `r3ngine_enrich_attack_path` (interpret/enrich only; `verified` needs `confirm_verified`).
+*   Portable cyber skills: allowlisted Anthropic subset synced on install/update into `skills/vendor/anthropic/` (`npm run sync-skills`).
 *   Dispatch tools: scan lifecycle, **subscans**, intel jobs, APME, named workflows.
 *   Payloads omit API Vault secrets, `results_dir` paths, `curl_command`, and email passwords.
 
@@ -180,12 +188,19 @@ npm run setup -- --url https://your-r3ngine-host --key r3n_mcp_… --yes
 
 `npm run setup` runs `scripts/install.mjs` (install, build, `.env`, session probe, smoke start). Copy `.env.example` if you prefer to fill values first.
 
-To refresh an existing install (rebuild from current checkout / after `git pull`; restarts detached HTTP if it was running):
+To refresh an existing install (rebuild from current checkout / after `git pull`; refreshes allowlisted cyber skills; restarts detached HTTP if it was running):
 
 ```bash
 npm run setup -- --update
 # or from r3ngine:
 node scripts/install-mcp.mjs --update
+```
+
+Skills only (portable vendor tree):
+
+```bash
+npm run sync-skills:missing
+npm run sync-skills
 ```
 
 Required env: `R3NGINE_URL`, `R3NGINE_MCP_API_KEY`. HTTP mode additionally uses `MCP_TRANSPORT=http`, `MCP_BIND`, `MCP_PORT`. Optional: `MCP_UNAUTH_MAX` and `MCP_UNAUTH_WINDOW_MS` (unauthorized HTTP rate limit; default 10 failures per IP per minute).

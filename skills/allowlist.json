@@ -1,0 +1,87 @@
+{
+  "upstream": {
+    "repo": "https://github.com/mukul975/Anthropic-Cybersecurity-Skills.git",
+    "ref": "main",
+    "skillsPrefix": "skills"
+  },
+  "denyNamePrefixes": [
+    "attacking-",
+    "exploiting-",
+    "weaponiz"
+  ],
+  "denyNameSubstrings": [
+    "phishing",
+    "bruteforce",
+    "brute-force",
+    "payload",
+    "shellcode",
+    "metasploit",
+    "msfvenom",
+    "sqlmap",
+    "hydra",
+    "reverse-shell",
+    "bind-shell"
+  ],
+  "skills": [
+    {
+      "id": "conducting-external-reconnaissance-with-osint",
+      "agents": ["r3ngine-osint", "r3ngine-assessor"],
+      "notes": "External OSINT verification lens"
+    },
+    {
+      "id": "performing-ai-driven-osint-correlation",
+      "agents": ["r3ngine-osint", "r3ngine-assessor"],
+      "notes": "Correlate staging candidates"
+    },
+    {
+      "id": "performing-osint-with-spiderfoot",
+      "agents": ["r3ngine-osint"],
+      "notes": "Primary only when spiderfoot_primary"
+    },
+    {
+      "id": "performing-web-application-vulnerability-triage",
+      "agents": ["r3ngine-vuln-validator", "r3ngine-assessor"],
+      "notes": "SAFE triage patterns"
+    },
+    {
+      "id": "prioritizing-vulnerabilities-with-cvss-scoring",
+      "agents": ["r3ngine-vuln-validator", "r3ngine-assessor"],
+      "notes": "CVSS interpretation"
+    },
+    {
+      "id": "implementing-epss-score-for-vulnerability-prioritization",
+      "agents": ["r3ngine-vuln-validator"],
+      "notes": "EPSS as urgency signal"
+    },
+    {
+      "id": "performing-cve-prioritization-with-kev-catalog",
+      "agents": ["r3ngine-vuln-validator"],
+      "notes": "CISA KEV existence signal"
+    },
+    {
+      "id": "mapping-mitre-attack-techniques",
+      "agents": ["r3ngine-vuln-validator", "r3ngine-assessor"],
+      "notes": "ATT&CK technique IDs only"
+    },
+    {
+      "id": "implementing-threat-modeling-with-mitre-attack",
+      "agents": ["r3ngine-vuln-validator", "r3ngine-assessor"],
+      "notes": "Interpretive threat modeling"
+    },
+    {
+      "id": "performing-threat-modeling-with-owasp-threat-dragon",
+      "agents": ["r3ngine-assessor"],
+      "notes": "Modeling patterns; no live tooling required"
+    },
+    {
+      "id": "triaging-vulnerabilities-with-ssvc-framework",
+      "agents": ["r3ngine-vuln-validator"],
+      "notes": "Decision triage framework"
+    },
+    {
+      "id": "implementing-attack-path-analysis-with-xm-cyber",
+      "agents": ["r3ngine-vuln-validator"],
+      "notes": "Path realism concepts only; do not require XM Cyber"
+    }
+  ]
+}

@@ -1,7 +1,22 @@
 # Interpret skills (r3ngine-local)
 
-Curated playbooks for the assessor. Not the full external cybersecurity-skills catalog.
-No exploit PoC skills. Use with MCP evidence only.
+Curated playbooks for specialist agents. Portable with the MCP checkout/image — **not** the full external cybersecurity-skills catalog and **not** `~/.claude/skills`.
+
+## Install / refresh (operators)
+
+```bash
+# During MCP setup/update (automatic)
+node scripts/install-mcp.mjs --update
+# or, inside r3ngine-mcp:
+node scripts/install.mjs --update
+
+# On-demand / missing only
+npm run sync-skills:missing
+# Full allowlist refresh
+npm run sync-skills
+```
+
+Allowlist: [`allowlist.json`](allowlist.json). Vendor tree: `vendor/anthropic/` (+ `MANIFEST.json`). Denylist blocks `attacking-*`, `exploiting-*`, phishing/bruteforce/payload-style names.
 
 | Skill | File | Use when |
 |-------|------|----------|
@@ -21,6 +36,21 @@ No exploit PoC skills. Use with MCP evidence only.
 | Failed-plan retry | `failed-plan-retry.md` | Summarizing abort/fail for operators |
 | Evidence citation | `evidence-citation.md` | Citing scan/asset/tool ids |
 
+## SAFE vuln validation (`skills/vuln-validation/`)
+
+Used by `r3ngine-vuln-validator` (and the assessor when packaging handoffs):
+
+| Skill | File | Notes |
+|-------|------|-------|
+| Allowlist / policy | `vuln-validation/README.md` | Gated themes; exclude attacking-* |
+| Handoff contract | `vuln-validation/vuln-handoff.md` | Assessor → validator package |
+| Impact classes | `vuln-validation/impact-classes.md` | Enrichment taxonomy |
+| CVE signals | `vuln-validation/cve-signals.md` | KEV/EPSS/existence only |
+| FP patterns | `vuln-validation/false-positive-patterns.md` | Noise triage |
+| ATT&CK mapping | `vuln-validation/attck-mapping.md` | Technique IDs |
+| Path feasibility | `vuln-validation/path-feasibility.md` | APME critique |
+| Validation writes | `vuln-validation/validation-writes.md` | verified gate |
+
 ## OSINT verify (`skills/osint/`)
 
 Used by `r3ngine-osint` (and the assessor when packaging handoffs):
@@ -32,3 +62,11 @@ Used by `r3ngine-osint` (and the assessor when packaging handoffs):
 | External OSINT recon | `osint/conducting-external-reconnaissance-with-osint.md` | Curated Anthropic adapt |
 | OSINT correlation | `osint/performing-ai-driven-osint-correlation.md` | Curated Anthropic adapt |
 | Spiderfoot | `osint/performing-osint-with-spiderfoot.md` | Primary only if scan has Spiderfoot tasks |
+
+## Vendor Anthropic subset (`skills/vendor/anthropic/`)
+
+Synced from [mukul975/Anthropic-Cybersecurity-Skills](https://github.com/mukul975/Anthropic-Cybersecurity-Skills) per `allowlist.json`. Each skill includes `ADAPTER.md` (interpretive only). Prefer local curated files when wording conflicts.
+
+## Lessons
+
+`_lessons/` — optional session bullets from agents; human review before promoting into curated playbooks.
