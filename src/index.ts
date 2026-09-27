@@ -8,6 +8,10 @@ import { createServer } from './server.js';
 import { openSession, startHeartbeat } from './session.js';
 import { resolveAgentIdentity } from './identity.js';
 import { UnauthRateLimit, clientIp } from './ratelimit.js';
+import {
+  fetchEnabledPluginSlugs,
+  registerPluginToolsAfterSession,
+} from './tools/index.js';
 import { PACKAGE_NAME, PACKAGE_VERSION } from './version.js';
 
 const HTTP_DISABLED =
@@ -63,6 +67,15 @@ async function main() {
         transport: 'stdio',
       }, identity);
       startHeartbeat(client, sessionId);
+      // Register plugin tools after session so /api/mcp/plugins/ is authorized.
+      const registered = await registerPluginToolsAfterSession(server, client);
+      if (registered.length) {
+        try {
+          server.sendToolListChanged();
+        } catch {
+          // Older SDK / transport may not support the notification.
+        }
+      }
     } catch (error) {
       console.error(
         'MCP session open failed after stdio connect:',
@@ -154,7 +167,9 @@ async function main() {
         res.status(403).json({ error: HTTP_DISABLED });
         return;
       }
-      const server = createServer(client);
+      // Session already open — discover enabled plugins before registering tools.
+      const enabledPluginSlugs = await fetchEnabledPluginSlugs(client);
+      const server = createServer(client, { enabledPluginSlugs });
       const transport = new StreamableHTTPServerTransport({
         sessionIdGenerator: undefined,
       });

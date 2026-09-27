@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { listToolNames } from './index.ts';
+import { listConditionalPluginToolNames, listToolNames } from './index.ts';
+import { AD_PLUGIN_TOOL_NAMES, PLUGIN_DISCOVERY_TOOL_NAMES } from './plugins/index.ts';
 
 const expected = [
   'r3ngine_list_projects',
@@ -64,12 +65,29 @@ const expected = [
   'r3ngine_trigger_apme',
   'r3ngine_recalculate_apme',
   'r3ngine_start_workflow',
+  ...PLUGIN_DISCOVERY_TOOL_NAMES,
 ];
 
-test('registers every spec tool name and none that delete or touch files', () => {
+test('registers every core/discovery tool name and none that delete or touch files', () => {
   const names = listToolNames();
   assert.deepEqual([...names].sort(), [...expected].sort());
   for (const name of names) {
     assert.equal(/delete|import|file/i.test(name), false, name);
+  }
+});
+
+test('plugin discovery tools are always listed', () => {
+  const names = new Set(listToolNames());
+  for (const name of PLUGIN_DISCOVERY_TOOL_NAMES) {
+    assert.equal(names.has(name), true, name);
+  }
+});
+
+test('AD plugin tools are conditional (not in always-on TOOL_NAMES)', () => {
+  const always = new Set(listToolNames());
+  const conditional = listConditionalPluginToolNames();
+  assert.deepEqual([...conditional].sort(), [...AD_PLUGIN_TOOL_NAMES].sort());
+  for (const name of AD_PLUGIN_TOOL_NAMES) {
+    assert.equal(always.has(name), false, `${name} should not be always-on`);
   }
 });

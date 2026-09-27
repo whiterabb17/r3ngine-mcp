@@ -6,11 +6,18 @@ import { registerFindingTools } from './findings.js';
 import { registerFollowupTools } from './followups.js';
 import { registerNoteTools } from './notes.js';
 import { registerOsintTools } from './osint.js';
+import {
+  AD_PLUGIN_TOOL_NAMES,
+  PLUGIN_DISCOVERY_TOOL_NAMES,
+  registerDiscoveryTools,
+  registerEnabledPluginTools,
+} from './plugins/index.js';
 import { registerProjectTools } from './projects.js';
 import { registerScanTools } from './scans.js';
 import { registerTargetTools } from './targets.js';
 import { registerValidationTools } from './validation.js';
 
+/** Always-registered core + discovery tools (plugin tools are session-conditional). */
 export const TOOL_NAMES = [
   'r3ngine_list_projects',
   'r3ngine_list_targets',
@@ -73,13 +80,30 @@ export const TOOL_NAMES = [
   'r3ngine_trigger_apme',
   'r3ngine_recalculate_apme',
   'r3ngine_start_workflow',
+  ...PLUGIN_DISCOVERY_TOOL_NAMES,
 ] as const;
+
+/** Plugin tools that may be registered after session when the plugin is enabled. */
+export const CONDITIONAL_PLUGIN_TOOL_NAMES = [...AD_PLUGIN_TOOL_NAMES] as const;
 
 export function listToolNames(): string[] {
   return [...TOOL_NAMES];
 }
 
-export function registerTools(server: McpServer, client: RengineMcpClient) {
+export function listConditionalPluginToolNames(): string[] {
+  return [...CONDITIONAL_PLUGIN_TOOL_NAMES];
+}
+
+export type RegisterToolsOptions = {
+  /** When set, also register MCP tools for these enabled plugin slugs. */
+  enabledPluginSlugs?: Iterable<string>;
+};
+
+export function registerTools(
+  server: McpServer,
+  client: RengineMcpClient,
+  options: RegisterToolsOptions = {},
+) {
   registerProjectTools(server, client);
   registerTargetTools(server, client);
   registerScanTools(server, client);
@@ -90,4 +114,14 @@ export function registerTools(server: McpServer, client: RengineMcpClient) {
   registerApmeTools(server, client);
   registerDispatchTools(server, client);
   registerFollowupTools(server, client);
+  registerDiscoveryTools(server, client);
+  if (options.enabledPluginSlugs) {
+    registerEnabledPluginTools(server, client, options.enabledPluginSlugs);
+  }
 }
+
+export {
+  fetchEnabledPluginSlugs,
+  registerEnabledPluginTools,
+  registerPluginToolsAfterSession,
+} from './plugins/index.js';
