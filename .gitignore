@@ -4,3 +4,4 @@ dist/
 *.log
 *.pid
 .r3ngine-mcp.pid
+skills/vendor
