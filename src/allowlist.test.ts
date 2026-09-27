@@ -13,6 +13,9 @@ test('allows targets and session open', () => {
   assert.doesNotThrow(() => assertAllowedPath('/api/mcp/plugins/active_directory/'));
   assert.doesNotThrow(() => assertAllowedPath('/api/mcp/ad/assessments/'));
   assert.doesNotThrow(() => assertAllowedPath('/api/mcp/ad/assessments/1/report/'));
+  assert.doesNotThrow(() => assertAllowedPath('/api/mcp/credentials/tasks/'));
+  assert.doesNotThrow(() => assertAllowedPath('/api/mcp/compliance/assessments/'));
+  assert.doesNotThrow(() => assertAllowedPath('/api/mcp/burp/issues/'));
 });
 
 test('refuses audit, keys, and session revoke', () => {

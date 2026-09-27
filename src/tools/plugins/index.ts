@@ -5,13 +5,48 @@ import {
   AD_PLUGIN_TOOL_NAMES,
   registerActiveDirectoryTools,
 } from './active_directory.js';
+import {
+  BURP_PLUGIN_SLUG,
+  BURP_PLUGIN_TOOL_NAMES,
+  registerBurpsuiteIntegrationTools,
+} from './burpsuite_integration.js';
+import {
+  COMPLIANCE_PLUGIN_SLUG,
+  COMPLIANCE_PLUGIN_TOOL_NAMES,
+  registerComplianceAssessmentTools,
+} from './compliance_assessment.js';
+import {
+  CREDENTIAL_PLUGIN_SLUG,
+  CREDENTIAL_PLUGIN_TOOL_NAMES,
+  registerCredentialIntelligenceTools,
+} from './credential_intelligence.js';
 import { PLUGIN_DISCOVERY_TOOL_NAMES, registerPluginDiscoveryTools } from './discovery.js';
 
-export { AD_PLUGIN_SLUG, AD_PLUGIN_TOOL_NAMES, PLUGIN_DISCOVERY_TOOL_NAMES };
+export {
+  AD_PLUGIN_SLUG,
+  AD_PLUGIN_TOOL_NAMES,
+  BURP_PLUGIN_SLUG,
+  BURP_PLUGIN_TOOL_NAMES,
+  COMPLIANCE_PLUGIN_SLUG,
+  COMPLIANCE_PLUGIN_TOOL_NAMES,
+  CREDENTIAL_PLUGIN_SLUG,
+  CREDENTIAL_PLUGIN_TOOL_NAMES,
+  PLUGIN_DISCOVERY_TOOL_NAMES,
+};
+
+const PLUGIN_TOOL_NAMES: Record<string, readonly string[]> = {
+  [AD_PLUGIN_SLUG]: AD_PLUGIN_TOOL_NAMES,
+  [CREDENTIAL_PLUGIN_SLUG]: CREDENTIAL_PLUGIN_TOOL_NAMES,
+  [COMPLIANCE_PLUGIN_SLUG]: COMPLIANCE_PLUGIN_TOOL_NAMES,
+  [BURP_PLUGIN_SLUG]: BURP_PLUGIN_TOOL_NAMES,
+};
 
 /** Map plugin slug → register function for conditional MCP tools. */
 const PLUGIN_REGISTRARS: Record<string, (server: McpServer, client: RengineMcpClient) => void> = {
   [AD_PLUGIN_SLUG]: registerActiveDirectoryTools,
+  [CREDENTIAL_PLUGIN_SLUG]: registerCredentialIntelligenceTools,
+  [COMPLIANCE_PLUGIN_SLUG]: registerComplianceAssessmentTools,
+  [BURP_PLUGIN_SLUG]: registerBurpsuiteIntegrationTools,
 };
 
 export type PluginListPayload = {
@@ -44,9 +79,7 @@ export function registerEnabledPluginTools(
   for (const [slug, register] of Object.entries(PLUGIN_REGISTRARS)) {
     if (!seen.has(slug)) continue;
     register(server, client);
-    if (slug === AD_PLUGIN_SLUG) {
-      registered.push(...AD_PLUGIN_TOOL_NAMES);
-    }
+    registered.push(...(PLUGIN_TOOL_NAMES[slug] || []));
   }
   return registered;
 }

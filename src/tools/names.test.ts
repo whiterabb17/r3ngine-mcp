@@ -1,7 +1,13 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { listConditionalPluginToolNames, listToolNames } from './index.ts';
-import { AD_PLUGIN_TOOL_NAMES, PLUGIN_DISCOVERY_TOOL_NAMES } from './plugins/index.ts';
+import {
+  AD_PLUGIN_TOOL_NAMES,
+  BURP_PLUGIN_TOOL_NAMES,
+  COMPLIANCE_PLUGIN_TOOL_NAMES,
+  CREDENTIAL_PLUGIN_TOOL_NAMES,
+  PLUGIN_DISCOVERY_TOOL_NAMES,
+} from './plugins/index.ts';
 
 const expected = [
   'r3ngine_list_projects',
@@ -86,8 +92,14 @@ test('plugin discovery tools are always listed', () => {
 test('AD plugin tools are conditional (not in always-on TOOL_NAMES)', () => {
   const always = new Set(listToolNames());
   const conditional = listConditionalPluginToolNames();
-  assert.deepEqual([...conditional].sort(), [...AD_PLUGIN_TOOL_NAMES].sort());
-  for (const name of AD_PLUGIN_TOOL_NAMES) {
+  const expectedConditional = [
+    ...AD_PLUGIN_TOOL_NAMES,
+    ...CREDENTIAL_PLUGIN_TOOL_NAMES,
+    ...COMPLIANCE_PLUGIN_TOOL_NAMES,
+    ...BURP_PLUGIN_TOOL_NAMES,
+  ];
+  assert.deepEqual([...conditional].sort(), [...expectedConditional].sort());
+  for (const name of expectedConditional) {
     assert.equal(always.has(name), false, `${name} should not be always-on`);
   }
 });

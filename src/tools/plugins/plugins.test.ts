@@ -3,6 +3,12 @@ import { test } from 'node:test';
 import {
   AD_PLUGIN_SLUG,
   AD_PLUGIN_TOOL_NAMES,
+  BURP_PLUGIN_SLUG,
+  BURP_PLUGIN_TOOL_NAMES,
+  COMPLIANCE_PLUGIN_SLUG,
+  COMPLIANCE_PLUGIN_TOOL_NAMES,
+  CREDENTIAL_PLUGIN_SLUG,
+  CREDENTIAL_PLUGIN_TOOL_NAMES,
   enabledSlugsFromPayload,
   registerEnabledPluginTools,
 } from './index.ts';
@@ -16,7 +22,7 @@ test('enabledSlugsFromPayload extracts slugs', () => {
   assert.equal(slugs.has('missing'), false);
 });
 
-test('registerEnabledPluginTools skips when AD not enabled', () => {
+test('registerEnabledPluginTools skips when no matching plugins enabled', () => {
   const registeredNames: string[] = [];
   const server = {
     registerTool: (name: string) => {
@@ -24,12 +30,12 @@ test('registerEnabledPluginTools skips when AD not enabled', () => {
     },
   };
   const client = {} as never;
-  const out = registerEnabledPluginTools(server as never, client, ['credential_intelligence']);
+  const out = registerEnabledPluginTools(server as never, client, ['email_security']);
   assert.deepEqual(out, []);
   assert.equal(registeredNames.length, 0);
 });
 
-test('registerEnabledPluginTools registers AD tools when slug enabled', () => {
+test('registerEnabledPluginTools registers tools for each enabled plugin', () => {
   const registeredNames: string[] = [];
   const server = {
     registerTool: (name: string) => {
@@ -37,9 +43,20 @@ test('registerEnabledPluginTools registers AD tools when slug enabled', () => {
     },
   };
   const client = {} as never;
-  const out = registerEnabledPluginTools(server as never, client, [AD_PLUGIN_SLUG]);
-  assert.deepEqual([...out].sort(), [...AD_PLUGIN_TOOL_NAMES].sort());
-  for (const name of AD_PLUGIN_TOOL_NAMES) {
+  const out = registerEnabledPluginTools(server as never, client, [
+    AD_PLUGIN_SLUG,
+    CREDENTIAL_PLUGIN_SLUG,
+    COMPLIANCE_PLUGIN_SLUG,
+    BURP_PLUGIN_SLUG,
+  ]);
+  const expected = [
+    ...AD_PLUGIN_TOOL_NAMES,
+    ...CREDENTIAL_PLUGIN_TOOL_NAMES,
+    ...COMPLIANCE_PLUGIN_TOOL_NAMES,
+    ...BURP_PLUGIN_TOOL_NAMES,
+  ];
+  assert.deepEqual([...out].sort(), [...expected].sort());
+  for (const name of expected) {
     assert.equal(registeredNames.includes(name), true, name);
   }
 });

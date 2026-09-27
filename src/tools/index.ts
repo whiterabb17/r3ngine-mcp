@@ -8,6 +8,9 @@ import { registerNoteTools } from './notes.js';
 import { registerOsintTools } from './osint.js';
 import {
   AD_PLUGIN_TOOL_NAMES,
+  BURP_PLUGIN_TOOL_NAMES,
+  COMPLIANCE_PLUGIN_TOOL_NAMES,
+  CREDENTIAL_PLUGIN_TOOL_NAMES,
   PLUGIN_DISCOVERY_TOOL_NAMES,
   registerDiscoveryTools,
   registerEnabledPluginTools,
@@ -84,7 +87,12 @@ export const TOOL_NAMES = [
 ] as const;
 
 /** Plugin tools that may be registered after session when the plugin is enabled. */
-export const CONDITIONAL_PLUGIN_TOOL_NAMES = [...AD_PLUGIN_TOOL_NAMES] as const;
+export const CONDITIONAL_PLUGIN_TOOL_NAMES = [
+  ...AD_PLUGIN_TOOL_NAMES,
+  ...CREDENTIAL_PLUGIN_TOOL_NAMES,
+  ...COMPLIANCE_PLUGIN_TOOL_NAMES,
+  ...BURP_PLUGIN_TOOL_NAMES,
+] as const;
 
 export function listToolNames(): string[] {
   return [...TOOL_NAMES];

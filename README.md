@@ -9,12 +9,12 @@
 </p>
 
 <p align="center">
-<a href="https://github.com/whiterabb17/r3ngine-mcp/releases" target="_blank"><img src="https://img.shields.io/badge/version-v1.3.0-informational?&logo=none" alt="r3ngine MCP Version" /></a>&nbsp;<a href="https://github.com/whiterabb17/r3ngine/releases" target="_blank"><img src="https://img.shields.io/badge/compatible_with-r3ngine_v3.7.6+-warning?&logo=none" alt="Compatible r3ngine version" /></a><br/><a href="https://www.gnu.org/licenses/gpl-3.0" target="_blank"><img src="https://img.shields.io/badge/License-GPLv3-red.svg?&logo=none" alt="License" /></a>&nbsp;<a href="https://modelcontextprotocol.io" target="_blank"><img src="https://img.shields.io/badge/Protocol-MCP-blue.svg?&logo=none" alt="MCP" /></a>&nbsp;<a href="https://www.typescriptlang.org/" target="_blank"><img src="https://img.shields.io/badge/Language-TypeScript-3178C6.svg?&logo=none" alt="TypeScript" /></a>
+<a href="https://github.com/whiterabb17/r3ngine-mcp/releases" target="_blank"><img src="https://img.shields.io/badge/version-v1.4.0-informational?&logo=none" alt="r3ngine MCP Version" /></a>&nbsp;<a href="https://github.com/whiterabb17/r3ngine/releases" target="_blank"><img src="https://img.shields.io/badge/compatible_with-r3ngine_v3.7.7+-warning?&logo=none" alt="Compatible r3ngine version" /></a><br/><a href="https://www.gnu.org/licenses/gpl-3.0" target="_blank"><img src="https://img.shields.io/badge/License-GPLv3-red.svg?&logo=none" alt="License" /></a>&nbsp;<a href="https://modelcontextprotocol.io" target="_blank"><img src="https://img.shields.io/badge/Protocol-MCP-blue.svg?&logo=none" alt="MCP" /></a>&nbsp;<a href="https://www.typescriptlang.org/" target="_blank"><img src="https://img.shields.io/badge/Language-TypeScript-3178C6.svg?&logo=none" alt="TypeScript" /></a>
 </p>
 
 <h4>r3ngine MCP: Agent Access Without Giving Away the Keys to the Kingdom</h4>
 <p>
-  r3ngine-mcp is the official Model Context Protocol server for the <b>r3ngine 3.0 Phoenix Rebirth</b>. Cursor, Claude Desktop, VS Code, or any MCP-capable agent can list recon data, queue allowed scans, verify OSINT staging, and run <b>SAFE vulnerability / attack-path enrichment</b> (interpret-only) using a hashed API key — without delete/edit tools, database URLs, or filesystem mounts. Install/update syncs <b>portable allowlisted cyber skills</b> into this checkout. The process speaks MCP only and is an HTTP client of <code>/api/mcp/</code> on your instance.
+  r3ngine-mcp is the official Model Context Protocol server for the <b>r3ngine 3.0 Phoenix Rebirth</b>. Cursor, Claude Desktop, VS Code, or any MCP-capable agent can list recon data, queue allowed scans, verify OSINT staging, run <b>SAFE vulnerability / attack-path enrichment</b> (interpret-only), and — when plugins are installed on the host — use <b>plugin-gated</b> AD, credential, compliance, and Burp tools using a hashed API key — without delete/edit tools, database URLs, or filesystem mounts. Install/update syncs <b>portable allowlisted cyber skills</b> into this checkout. The process speaks MCP only and is an HTTP client of <code>/api/mcp/</code> on your instance.
 </p>
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
@@ -107,6 +107,11 @@ In Cursor: invoke the agent by name.
 *   Follow-ups: propose / get / list / update / approve / abort / retry + metrics; detail payloads may include capped `suggested_followups`.
 *   OSINT staging: `r3ngine_list_osint_staging`, `r3ngine_verify_osint_staging` (`agent_verified` badges in r3ngine).
 *   SAFE validation: `r3ngine_analyze_vulnerability`, `r3ngine_enrich_vulnerability`, `r3ngine_validate_vulnerability`, `r3ngine_enrich_attack_path` (interpret/enrich only; `verified` needs `confirm_verified`).
+*   Plugin discovery: `r3ngine_list_plugins`, `r3ngine_get_plugin` (always registered). Plugin-specific tools register only when the host reports the slug enabled.
+*   Active Directory (when installed): assessments, BloodHound JSON ingest, findings, AD attack paths, reports — distinct from APME web paths.
+*   Credential Intelligence (when installed): auth-testing tasks, redacted discovered credentials, hash cracking status.
+*   Compliance Assessment (when installed): assessments, controls, attestation JSON, control enrich.
+*   Burp Suite Integration (when installed): issues, metrics, sync logs, health, import sync.
 *   Portable cyber skills: allowlisted Anthropic subset synced on install/update into `skills/vendor/anthropic/` (`npm run sync-skills`).
 *   Dispatch tools: scan lifecycle, **subscans**, intel jobs, APME, named workflows.
 *   Payloads omit API Vault secrets, `results_dir` paths, `curl_command`, and email passwords.

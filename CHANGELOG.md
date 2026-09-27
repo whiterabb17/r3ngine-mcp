@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.4.0] - 2026-09-27
+
+### Added
+
+- Plugin discovery tools: `r3ngine_list_plugins`, `r3ngine_get_plugin` (always registered)
+- Conditional plugin tool packs registered after session open when the host reports the plugin enabled:
+  - **active_directory** — assessments, BloodHound/LDAP ingest, findings, AD attack paths, reports
+  - **credential_intelligence** — credential tasks, redacted discovered credentials, hash cracking
+  - **compliance_assessment** — assessments, controls, attestation report, control enrich
+  - **burpsuite_integration** — issues, metrics, sync logs, health, import sync
+- Allowlist prefixes: `/api/mcp/plugins/`, `/api/mcp/ad/`, `/api/mcp/credentials/`, `/api/mcp/compliance/`, `/api/mcp/burp/`
+- stdio: `tools/list_changed` after plugin tools register; HTTP: discover plugins before `createServer`
+
+### Notes
+
+- Requires r3ngine **v3.7.7+** plugin-gated `/api/mcp/` views and matching installed plugins
+- Metasploit / active exploitation are intentionally not exposed
+- Plugin tools are absent from always-on `TOOL_NAMES`; use `listConditionalPluginToolNames()` / session registration
+
 ## [1.3.0] - 2026-09-26
 
 ### Added
