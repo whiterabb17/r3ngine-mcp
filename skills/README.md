@@ -48,8 +48,20 @@ Used by `r3ngine-vuln-validator` (and the assessor when packaging handoffs):
 | CVE signals | `vuln-validation/cve-signals.md` | KEV/EPSS/existence only |
 | FP patterns | `vuln-validation/false-positive-patterns.md` | Noise triage |
 | ATT&CK mapping | `vuln-validation/attck-mapping.md` | Technique IDs |
-| Path feasibility | `vuln-validation/path-feasibility.md` | APME critique |
+| Path feasibility | `vuln-validation/path-feasibility.md` | Stub → see `attack-path/path-feasibility.md` |
 | Validation writes | `vuln-validation/validation-writes.md` | verified gate |
+
+## Attack-path modeling (`skills/attack-path/`)
+
+Used by `r3ngine-attack-path` (and the assessor when packaging handoffs):
+
+| Skill | File | Notes |
+|-------|------|-------|
+| Policy / tools | `attack-path/README.md` | Propose→approve tool map |
+| Handoff contract | `attack-path/path-handoff.md` | Assessor → path agent |
+| Proposals | `attack-path/path-proposals.md` | Ops + SAFE step schema |
+| Feasibility | `attack-path/path-feasibility.md` | plausible / stretched / fantasy |
+| Attack trees | `attack-path/attack-tree-modeling.md` | AND/OR structure; no exploit leaves |
 
 ## OSINT verify (`skills/osint/`)
 

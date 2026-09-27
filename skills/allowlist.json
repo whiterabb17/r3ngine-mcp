@@ -60,17 +60,17 @@
     },
     {
       "id": "mapping-mitre-attack-techniques",
-      "agents": ["r3ngine-vuln-validator", "r3ngine-assessor"],
+      "agents": ["r3ngine-vuln-validator", "r3ngine-assessor", "r3ngine-attack-path"],
       "notes": "ATT&CK technique IDs only"
     },
     {
       "id": "implementing-threat-modeling-with-mitre-attack",
-      "agents": ["r3ngine-vuln-validator", "r3ngine-assessor"],
+      "agents": ["r3ngine-vuln-validator", "r3ngine-assessor", "r3ngine-attack-path"],
       "notes": "Interpretive threat modeling"
     },
     {
       "id": "performing-threat-modeling-with-owasp-threat-dragon",
-      "agents": ["r3ngine-assessor"],
+      "agents": ["r3ngine-assessor", "r3ngine-attack-path"],
       "notes": "Modeling patterns; no live tooling required"
     },
     {
@@ -80,7 +80,7 @@
     },
     {
       "id": "implementing-attack-path-analysis-with-xm-cyber",
-      "agents": ["r3ngine-vuln-validator"],
+      "agents": ["r3ngine-vuln-validator", "r3ngine-attack-path"],
       "notes": "Path realism concepts only; do not require XM Cyber"
     }
   ]

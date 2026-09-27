@@ -101,8 +101,8 @@ export function registerValidationTools(server: McpServer, client: RengineMcpCli
     server,
     client,
     'r3ngine_enrich_attack_path',
-    'Enrich attack path (SAFE)',
-    'Annotate an APME path with feasibility (plausible/stretched/fantasy), confidence, blocked_reasons, missing_prereqs, impact_classes, rationale. Locate by apme_path_id or ImpactAssessment id. Not available to auditors.',
+    'Enrich attack path (deprecated)',
+    'DEPRECATED: returns 410. Use r3ngine_propose_attack_path with operation=enrich; operator must approve before apply.',
     {
       path_id: z.string().min(1),
       feasibility: pathFeasibilitySchema.optional(),
