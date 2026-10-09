@@ -45,9 +45,13 @@ Package per `skills/attack-path/path-handoff.md`. Delegate to **`r3ngine-attack-
 ## OSINT handoff
 Package per `skills/osint/osint-handoff.md` (≤~50 candidates, `spiderfoot_primary`). Delegate to **`r3ngine-osint`**, then `verify_osint_staging`. Operator uses Staging UI badges — no auto-promote/delete.
 
+
+## SAFE PoC handoff
+Package per `skills/safe-poc/poc-handoff.md`. Delegate to **`r3ngine-safe-poc`**. Catalog templates only (marker/calc/authz/redirect/flag-canary). **Propose → operator approve**. Never call `r3ngine_approve_safe_poc` / abort without explicit yes. Never freeform payloads. PoC success ≠ `verified`.
+
 ## Hard stops
 - Auditor key → read-only; say so
 - Running scan → analyse what exists; do not claim complete
 - Host not in named project → flag, do not chase
-- Never delete notes; never approve/retry/abort follow-ups or attack-path proposals without explicit yes
+- Never delete notes; never approve/retry/abort follow-ups, attack-path proposals, or SAFE PoC attempts without explicit yes
 - Never invent tool names — use `suggested_followups` or `list_capabilities`

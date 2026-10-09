@@ -20,68 +20,236 @@
     "sqlmap",
     "hydra",
     "reverse-shell",
-    "bind-shell"
+    "bind-shell",
+    "exploitation",
+    "waf-bypass",
+    "attack-simulation",
+    "firewall-bypass",
+    "second-order-sql",
+    "blind-ssrf",
+    "request-smuggling",
+    "deserialization",
+    "c2-"
   ],
   "skills": [
     {
       "id": "conducting-external-reconnaissance-with-osint",
-      "agents": ["r3ngine-osint", "r3ngine-assessor"],
+      "agents": [
+        "r3ngine-osint",
+        "r3ngine-assessor"
+      ],
       "notes": "External OSINT verification lens"
     },
     {
       "id": "performing-ai-driven-osint-correlation",
-      "agents": ["r3ngine-osint", "r3ngine-assessor"],
+      "agents": [
+        "r3ngine-osint",
+        "r3ngine-assessor"
+      ],
       "notes": "Correlate staging candidates"
     },
     {
       "id": "performing-osint-with-spiderfoot",
-      "agents": ["r3ngine-osint"],
+      "agents": [
+        "r3ngine-osint"
+      ],
       "notes": "Primary only when spiderfoot_primary"
     },
     {
       "id": "performing-web-application-vulnerability-triage",
-      "agents": ["r3ngine-vuln-validator", "r3ngine-assessor"],
+      "agents": [
+        "r3ngine-vuln-validator",
+        "r3ngine-assessor",
+        "r3ngine-safe-poc"
+      ],
       "notes": "SAFE triage patterns"
     },
     {
       "id": "prioritizing-vulnerabilities-with-cvss-scoring",
-      "agents": ["r3ngine-vuln-validator", "r3ngine-assessor"],
+      "agents": [
+        "r3ngine-vuln-validator",
+        "r3ngine-assessor",
+        "r3ngine-safe-poc"
+      ],
       "notes": "CVSS interpretation"
     },
     {
       "id": "implementing-epss-score-for-vulnerability-prioritization",
-      "agents": ["r3ngine-vuln-validator"],
+      "agents": [
+        "r3ngine-vuln-validator",
+        "r3ngine-safe-poc"
+      ],
       "notes": "EPSS as urgency signal"
     },
     {
       "id": "performing-cve-prioritization-with-kev-catalog",
-      "agents": ["r3ngine-vuln-validator"],
+      "agents": [
+        "r3ngine-vuln-validator",
+        "r3ngine-safe-poc"
+      ],
       "notes": "CISA KEV existence signal"
     },
     {
       "id": "mapping-mitre-attack-techniques",
-      "agents": ["r3ngine-vuln-validator", "r3ngine-assessor", "r3ngine-attack-path"],
+      "agents": [
+        "r3ngine-vuln-validator",
+        "r3ngine-assessor",
+        "r3ngine-attack-path",
+        "r3ngine-safe-poc"
+      ],
       "notes": "ATT&CK technique IDs only"
     },
     {
       "id": "implementing-threat-modeling-with-mitre-attack",
-      "agents": ["r3ngine-vuln-validator", "r3ngine-assessor", "r3ngine-attack-path"],
+      "agents": [
+        "r3ngine-vuln-validator",
+        "r3ngine-assessor",
+        "r3ngine-attack-path",
+        "r3ngine-safe-poc"
+      ],
       "notes": "Interpretive threat modeling"
     },
     {
       "id": "performing-threat-modeling-with-owasp-threat-dragon",
-      "agents": ["r3ngine-assessor", "r3ngine-attack-path"],
+      "agents": [
+        "r3ngine-assessor",
+        "r3ngine-attack-path"
+      ],
       "notes": "Modeling patterns; no live tooling required"
     },
     {
       "id": "triaging-vulnerabilities-with-ssvc-framework",
-      "agents": ["r3ngine-vuln-validator"],
-      "notes": "Decision triage framework"
+      "agents": [
+        "r3ngine-vuln-validator",
+        "r3ngine-safe-poc"
+      ],
+      "notes": "Decide PoC vs skip"
     },
     {
       "id": "implementing-attack-path-analysis-with-xm-cyber",
-      "agents": ["r3ngine-vuln-validator", "r3ngine-attack-path"],
+      "agents": [
+        "r3ngine-vuln-validator",
+        "r3ngine-attack-path"
+      ],
       "notes": "Path realism concepts only; do not require XM Cyber"
+    },
+    {
+      "id": "testing-api-security-with-owasp-top-10",
+      "agents": [
+        "r3ngine-safe-poc",
+        "r3ngine-vuln-validator",
+        "r3ngine-assessor"
+      ],
+      "notes": "Map finding to SAFE PoC template class"
+    },
+    {
+      "id": "conducting-api-security-testing",
+      "agents": [
+        "r3ngine-safe-poc",
+        "r3ngine-vuln-validator",
+        "r3ngine-assessor"
+      ],
+      "notes": "API authz/BOLA lens → authz_status_delta"
+    },
+    {
+      "id": "testing-for-broken-access-control",
+      "agents": [
+        "r3ngine-safe-poc",
+        "r3ngine-vuln-validator",
+        "r3ngine-assessor"
+      ],
+      "notes": "Authz proofs → catalog only"
+    },
+    {
+      "id": "testing-api-for-broken-object-level-authorization",
+      "agents": [
+        "r3ngine-safe-poc",
+        "r3ngine-vuln-validator",
+        "r3ngine-assessor"
+      ],
+      "notes": "BOLA → authz_status_delta"
+    },
+    {
+      "id": "detecting-broken-object-property-level-authorization",
+      "agents": [
+        "r3ngine-safe-poc",
+        "r3ngine-vuln-validator",
+        "r3ngine-assessor"
+      ],
+      "notes": "BOPLA triage interpretive"
+    },
+    {
+      "id": "testing-for-xss-vulnerabilities",
+      "agents": [
+        "r3ngine-safe-poc",
+        "r3ngine-vuln-validator",
+        "r3ngine-assessor"
+      ],
+      "notes": "Reflection → marker_reflect only; no alert/theft"
+    },
+    {
+      "id": "testing-cors-misconfiguration",
+      "agents": [
+        "r3ngine-safe-poc",
+        "r3ngine-vuln-validator",
+        "r3ngine-assessor"
+      ],
+      "notes": "CORS header/status class only"
+    },
+    {
+      "id": "testing-for-open-redirect-vulnerabilities",
+      "agents": [
+        "r3ngine-safe-poc",
+        "r3ngine-vuln-validator",
+        "r3ngine-assessor"
+      ],
+      "notes": "→ open_redirect_safe only"
+    },
+    {
+      "id": "testing-for-business-logic-vulnerabilities",
+      "agents": [
+        "r3ngine-safe-poc",
+        "r3ngine-vuln-validator",
+        "r3ngine-assessor"
+      ],
+      "notes": "When not to auto-PoC"
+    },
+    {
+      "id": "testing-api-for-mass-assignment-vulnerability",
+      "agents": [
+        "r3ngine-safe-poc",
+        "r3ngine-vuln-validator",
+        "r3ngine-assessor"
+      ],
+      "notes": "Param hygiene; no write PoC in v1"
+    },
+    {
+      "id": "implementing-canary-tokens-for-network-intrusion",
+      "agents": [
+        "r3ngine-safe-poc"
+      ],
+      "notes": "Canary/expected_marker discipline"
+    },
+    {
+      "id": "implementing-deception-based-detection-with-canarytoken",
+      "agents": [
+        "r3ngine-safe-poc"
+      ],
+      "notes": "Marker lifecycle conceptual"
+    },
+    {
+      "id": "implementing-honeytokens-for-breach-detection",
+      "agents": [
+        "r3ngine-safe-poc"
+      ],
+      "notes": "flag/canary file proofs conceptual"
+    },
+    {
+      "id": "implementing-continuous-security-validation-with-bas",
+      "agents": [
+        "r3ngine-safe-poc"
+      ],
+      "notes": "Safe validation loop mindset"
     }
   ]
 }

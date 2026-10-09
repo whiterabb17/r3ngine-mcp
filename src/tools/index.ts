@@ -19,6 +19,7 @@ import { registerProjectTools } from './projects.js';
 import { registerScanTools } from './scans.js';
 import { registerTargetTools } from './targets.js';
 import { registerValidationTools } from './validation.js';
+import { registerSafePocTools } from './safe_poc.js';
 
 /** Always-registered core + discovery tools (plugin tools are session-conditional). */
 export const TOOL_NAMES = [
@@ -61,6 +62,13 @@ export const TOOL_NAMES = [
   'r3ngine_approve_attack_path_proposal',
   'r3ngine_abort_attack_path_proposal',
   'r3ngine_enrich_attack_path',
+  'r3ngine_list_safe_pocs',
+  'r3ngine_get_safe_poc',
+  'r3ngine_propose_safe_poc',
+  'r3ngine_update_safe_poc',
+  'r3ngine_approve_safe_poc',
+  'r3ngine_abort_safe_poc',
+  'r3ngine_run_safe_poc',
   'r3ngine_list_engines',
   'r3ngine_get_engine_detail',
   'r3ngine_list_capabilities',
@@ -124,6 +132,7 @@ export function registerTools(
   registerScanTools(server, client);
   registerFindingTools(server, client);
   registerValidationTools(server, client);
+  registerSafePocTools(server, client);
   registerOsintTools(server, client);
   registerNoteTools(server, client);
   registerApmeTools(server, client);

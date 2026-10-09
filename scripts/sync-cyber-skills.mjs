@@ -25,7 +25,8 @@ Interpretive use only for contracted assessments via r3ngine MCP.
 - Do **not** craft or execute exploits, payloads, or offensive command recipes.
 - Do **not** run third-party scanners or OSINT tools from this skill text.
 - Evidence comes from r3ngine MCP / stored CVE metadata only.
-- Prefer local curated playbooks under \`skills/\` and \`skills/vuln-validation/\` / \`skills/osint/\` when they conflict with upstream wording.
+- Prefer local curated playbooks under \`skills/\`, \`skills/vuln-validation/\`, \`skills/osint/\`, and \`skills/safe-poc/\` when they conflict with upstream wording.
+- For SAFE PoC: map findings to catalog \`template_id\` values only; execution requires \`r3ngine_approve_safe_poc\`.
 `;
 
 export function loadAllowlist(filePath = ALLOWLIST_PATH) {

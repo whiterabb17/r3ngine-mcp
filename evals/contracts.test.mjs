@@ -72,6 +72,10 @@ test('agent prompts include skill bootstrap and hard stops', () => {
   assert.match(validator, /0\.8/);
   assert.match(validator, /payload/i);
   assert.match(validator, /r3ngine_run_tool/);
+  const safePoc = readAgent('r3ngine-safe-poc.md');
+  assert.match(safePoc, /r3ngine_propose_safe_poc/);
+  assert.match(safePoc, /template_id/);
+  assert.match(assessor, /r3ngine-safe-poc/);
 });
 
 test('fixtures exist for assessor osint validator scenarios', () => {
@@ -93,3 +97,24 @@ test('AGENTS.md documents portable skills sync', () => {
   assert.match(agents, /vendor\/anthropic/);
   assert.doesNotMatch(agents, /Co-Authored-By/);
 });
+
+
+test('safe-poc handoff and allowlist', () => {
+  const handoff = fs.readFileSync(path.join(ROOT, 'skills/safe-poc/poc-handoff.md'), 'utf8');
+  assert.ok(handoff.includes('suggested_template_id'));
+  assert.ok(handoff.includes('vulnerability_id'));
+  assert.ok(!/payload\s*:/.test(handoff) || handoff.includes('Never include freeform'));
+
+  const allow = JSON.parse(fs.readFileSync(path.join(ROOT, 'skills/allowlist.json'), 'utf8'));
+  for (const bad of ['exploiting-sql-injection', 'attacking-active-directory', 'sqlmap-runbook']) {
+    const denied = (allow.denyNamePrefixes || []).some((p) => bad.startsWith(p))
+      || (allow.denyNameSubstrings || []).some((p) => bad.includes(p));
+    assert.ok(denied || !allow.skills.some((x) => x.id === bad), bad);
+  }
+  const ids = allow.skills.map((x) => x.id);
+  assert.ok(ids.includes('testing-for-xss-vulnerabilities'));
+  assert.ok(ids.includes('implementing-canary-tokens-for-network-intrusion'));
+  const xss = allow.skills.find((x) => x.id === 'testing-for-xss-vulnerabilities');
+  assert.ok(xss.agents.includes('r3ngine-safe-poc'));
+});
+

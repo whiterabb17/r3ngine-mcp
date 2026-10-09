@@ -82,3 +82,7 @@ Synced from [mukul975/Anthropic-Cybersecurity-Skills](https://github.com/mukul97
 ## Lessons
 
 `_lessons/` — optional session bullets from agents; human review before promoting into curated playbooks.
+
+## SAFE PoC
+
+See `skills/safe-poc/` for catalog-only PoC proposals (`r3ngine-safe-poc`). Vendor testing/triage/canary skills are interpretive — read `ADAPTER.md` first.

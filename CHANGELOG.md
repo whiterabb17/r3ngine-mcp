@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.5.0] - 2026-10-09
+
+### Added
+
+- SAFE PoC tools: `r3ngine_propose_safe_poc`, `r3ngine_update_safe_poc`, `r3ngine_approve_safe_poc`, `r3ngine_abort_safe_poc`, `r3ngine_list_safe_pocs`, `r3ngine_get_safe_poc`
+- `r3ngine_run_safe_poc` returns 410 (propose→approve only)
+- `r3ngine-safe-poc` agent + curated `skills/safe-poc/` (catalog templates only)
+- Expanded Anthropic skill allowlist for SAFE PoC interpretive testing/triage/canary skills; stronger deny substrings
+
+### Notes
+
+- Requires r3ngine `/api/mcp/safe-poc/` views + `SafePocAttempt` + Temporal `SafePocWorkflow`
+- Execution is server catalog only (marker/calc/authz/redirect/flag-canary); no freeform payloads
+- Approve/abort are operator-gated; PoC success does not auto-set `verified`
+
 ## [1.4.0] - 2026-09-27
 
 ### Added
