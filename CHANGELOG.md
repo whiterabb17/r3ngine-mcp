@@ -5,15 +5,18 @@
 ### Added
 
 - SAFE PoC tools: `r3ngine_propose_safe_poc`, `r3ngine_update_safe_poc`, `r3ngine_approve_safe_poc`, `r3ngine_abort_safe_poc`, `r3ngine_list_safe_pocs`, `r3ngine_get_safe_poc`
-- `r3ngine_run_safe_poc` returns 410 (propose→approve only)
-- `r3ngine-safe-poc` agent + curated `skills/safe-poc/` (catalog templates only)
+- `r3ngine_run_safe_poc` returns **410** (propose→approve only; no direct execute)
+- Specialist agent **`r3ngine-safe-poc`** + curated `skills/safe-poc/` (ADAPTER, template catalog, denylist, evidence criteria, handoffs, security controls)
+- `skills/vuln-validation/adversarial-triage.md` for validator↔PoC handoff posture
 - Expanded Anthropic skill allowlist for SAFE PoC interpretive testing/triage/canary skills; stronger deny substrings
 
 ### Notes
 
-- Requires r3ngine `/api/mcp/safe-poc/` views + `SafePocAttempt` + Temporal `SafePocWorkflow`
-- Execution is server catalog only (marker/calc/authz/redirect/flag-canary); no freeform payloads
-- Approve/abort are operator-gated; PoC success does not auto-set `verified`
+- Requires **r3ngine v3.7.9+** `/api/mcp/safe-poc/` views + `SafePocAttempt` (`mcp.0008`) + Temporal `SafePocWorkflow`
+- Execution is server catalog only (`marker_reflect`, `calc_echo`, `authz_status_delta`, `open_redirect_safe`, `flag_canary_read`); no freeform payloads
+- Approve/abort are operator-gated (JWT/UI); MCP cannot forge `operator` body flags
+- Results nest under `Vulnerability.agent_enrichment.poc`; PoC success does **not** auto-set `verified`
+- Cookie values are never echoed in tool responses; prefer digests/ids in notes
 
 ## [1.4.0] - 2026-09-27
 

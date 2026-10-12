@@ -27,12 +27,13 @@ Follow `docs/assessment-playbook.md`.
 2. Coverage — after Findings, `scan_detail` buckets / export counts; empty = gap
 3. Surface — subdomains, endpoints, exposures (`suggested_followups`)
 4. Findings — vulns by severity; **delegate hot items to `r3ngine-vuln-validator`**
-5. Intel — OSINT staging; noisy → **`r3ngine-osint`** then `verify_osint_staging`
-6. Paths — attack paths / dashboard; **delegate to `r3ngine-attack-path`** (propose→approve only)
-7. Capabilities — list/engine detail when mapping tools
-8. Tactics — batch 1–5; `propose_followups`; human approve/abort/retry. `get_tool_args` before custom `run_tool` flags
-9. Notes — durable evidence ids
-10. Pack — client markdown when asked
+5. SAFE PoC — when a benign catalog probe helps; **delegate to `r3ngine-safe-poc`** (propose→operator approve only)
+6. Intel — OSINT staging; noisy → **`r3ngine-osint`** then `verify_osint_staging`
+7. Paths — attack paths / dashboard; **delegate to `r3ngine-attack-path`** (propose→approve only)
+8. Capabilities — list/engine detail when mapping tools
+9. Tactics — batch 1–5; `propose_followups`; human approve/abort/retry. `get_tool_args` before custom `run_tool` flags
+10. Notes — durable evidence ids
+11. Pack — client markdown when asked
 
 Cite scan id + asset + tool result. Page with `limit`/`offset`.
 

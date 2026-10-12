@@ -9,12 +9,12 @@
 </p>
 
 <p align="center">
-<a href="https://github.com/whiterabb17/r3ngine-mcp/releases" target="_blank"><img src="https://img.shields.io/badge/version-v1.4.0-informational?&logo=none" alt="r3ngine MCP Version" /></a>&nbsp;<a href="https://github.com/whiterabb17/r3ngine/releases" target="_blank"><img src="https://img.shields.io/badge/compatible_with-r3ngine_v3.7.7+-warning?&logo=none" alt="Compatible r3ngine version" /></a><br/><a href="https://www.gnu.org/licenses/gpl-3.0" target="_blank"><img src="https://img.shields.io/badge/License-GPLv3-red.svg?&logo=none" alt="License" /></a>&nbsp;<a href="https://modelcontextprotocol.io" target="_blank"><img src="https://img.shields.io/badge/Protocol-MCP-blue.svg?&logo=none" alt="MCP" /></a>&nbsp;<a href="https://www.typescriptlang.org/" target="_blank"><img src="https://img.shields.io/badge/Language-TypeScript-3178C6.svg?&logo=none" alt="TypeScript" /></a>
+<a href="https://github.com/whiterabb17/r3ngine-mcp/releases" target="_blank"><img src="https://img.shields.io/badge/version-v1.5.0-informational?&logo=none" alt="r3ngine MCP Version" /></a>&nbsp;<a href="https://github.com/whiterabb17/r3ngine/releases" target="_blank"><img src="https://img.shields.io/badge/compatible_with-r3ngine_v3.7.9+-warning?&logo=none" alt="Compatible r3ngine version" /></a><br/><a href="https://www.gnu.org/licenses/gpl-3.0" target="_blank"><img src="https://img.shields.io/badge/License-GPLv3-red.svg?&logo=none" alt="License" /></a>&nbsp;<a href="https://modelcontextprotocol.io" target="_blank"><img src="https://img.shields.io/badge/Protocol-MCP-blue.svg?&logo=none" alt="MCP" /></a>&nbsp;<a href="https://www.typescriptlang.org/" target="_blank"><img src="https://img.shields.io/badge/Language-TypeScript-3178C6.svg?&logo=none" alt="TypeScript" /></a>
 </p>
 
 <h4>r3ngine MCP: Agent Access Without Giving Away the Keys to the Kingdom</h4>
 <p>
-  r3ngine-mcp is the official Model Context Protocol server for the <b>r3ngine 3.0 Phoenix Rebirth</b>. Cursor, Claude Desktop, VS Code, or any MCP-capable agent can list recon data, queue allowed scans, verify OSINT staging, run <b>SAFE vulnerability / attack-path enrichment</b> (interpret-only), and — when plugins are installed on the host — use <b>plugin-gated</b> AD, credential, compliance, and Burp tools using a hashed API key — without delete/edit tools, database URLs, or filesystem mounts. Install/update syncs <b>portable allowlisted cyber skills</b> into this checkout. The process speaks MCP only and is an HTTP client of <code>/api/mcp/</code> on your instance.
+  r3ngine-mcp is the official Model Context Protocol server for the <b>r3ngine 3.0 Phoenix Rebirth</b>. Cursor, Claude Desktop, VS Code, or any MCP-capable agent can list recon data, queue allowed scans, verify OSINT staging, run <b>SAFE vulnerability / attack-path enrichment</b> (interpret-only), propose <b>SAFE PoC</b> catalog probes for operator approve (no freeform payloads), and — when plugins are installed on the host — use <b>plugin-gated</b> AD, credential, compliance, and Burp tools using a hashed API key — without delete/edit tools, database URLs, or filesystem mounts. Install/update syncs <b>portable allowlisted cyber skills</b> into this checkout. The process speaks MCP only and is an HTTP client of <code>/api/mcp/</code> on your instance.
 </p>
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
@@ -79,8 +79,10 @@ This repo ships **consultant** specialists (not platform-dev agents): `AGENTS.md
 | **r3ngine-assessor** | Scan analysis, follow-ups, client pack |
 | **r3ngine-osint** | Noisy OSINT staging triage |
 | **r3ngine-vuln-validator** | SAFE vuln/path enrich + validation (no exploits) |
+| **r3ngine-attack-path** | APME path critique / propose→approve enrich (no apply without operator) |
+| **r3ngine-safe-poc** | Catalog-only SAFE PoC propose→approve (marker/calc/authz/redirect/flag-canary) |
 
-Skills live under `skills/` (curated) and `skills/vendor/anthropic/` (allowlisted upstream sync). Run `npm run sync-skills:missing` if vendor skills are absent. Never rely on `~/.claude/skills`.
+Skills live under `skills/` (curated, including `skills/safe-poc/`) and `skills/vendor/anthropic/` (allowlisted upstream sync). Run `npm run sync-skills:missing` if vendor skills are absent. Never rely on `~/.claude/skills`.
 
 In Cursor: invoke the agent by name.
 
@@ -107,6 +109,7 @@ In Cursor: invoke the agent by name.
 *   Follow-ups: propose / get / list / update / approve / abort / retry + metrics; detail payloads may include capped `suggested_followups`.
 *   OSINT staging: `r3ngine_list_osint_staging`, `r3ngine_verify_osint_staging` (`agent_verified` badges in r3ngine).
 *   SAFE validation: `r3ngine_analyze_vulnerability`, `r3ngine_enrich_vulnerability`, `r3ngine_validate_vulnerability`, `r3ngine_enrich_attack_path` (interpret/enrich only; `verified` needs `confirm_verified`).
+*   SAFE PoC: `r3ngine_propose_safe_poc`, `r3ngine_list_safe_pocs`, `r3ngine_get_safe_poc`, `r3ngine_update_safe_poc`, `r3ngine_approve_safe_poc`, `r3ngine_abort_safe_poc`. Direct `r3ngine_run_safe_poc` returns **410**. Server builds probes from catalog templates only; approve/abort are operator-gated; PoC success does not auto-set `verified`.
 *   Plugin discovery: `r3ngine_list_plugins`, `r3ngine_get_plugin` (always registered). Plugin-specific tools register only when the host reports the slug enabled.
 *   Active Directory (when installed): assessments, BloodHound JSON ingest, findings, AD attack paths, reports — distinct from APME web paths.
 *   Credential Intelligence (when installed): auth-testing tasks, redacted discovered credentials, hash cracking status.
@@ -217,6 +220,8 @@ Missing URL or key exits `1` on **stderr** (never stdout — that would break st
 ## What Agents Cannot Do
 
 Delete or update targets, subdomains, vulnerabilities, exposures, users, engines, wordlists, plugins, or files. **Delete notes** is not available (create/update notes are allowed for pentester keys). Config import/export. Arbitrary proxy to the rest of Django. Raw SQL. Shell.
+
+**No freeform exploits or payloads.** SAFE PoC agents may only pick a catalog `template_id` + typed params; the host builds the probe. Direct PoC execute is refused (**410** — propose→approve only). MCP body flags cannot claim operator privilege for approve/abort or lock-bypass edits.
 
 Session list, audit read, session revoke, and key management are **not** MCP tools. They stay in the r3ngine UI (JWT/session).
 
